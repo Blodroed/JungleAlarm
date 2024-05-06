@@ -45,8 +45,8 @@ private:
     bool alarmOn;
     bool alarmActive;
 
-    time_t alarmTime;
-    Thread alarmThread;    
+    time_t alarmTime;       
+    Thread alarmThread;    // TODO: find out how to init the thread in main.cpp
 
     void (*changeScreenLeft)(int screenNumber, int maxScreenNumber);
     void (*changeScreenRight)(int screenNumber, int maxScreenNumber);
