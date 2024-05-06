@@ -5,17 +5,39 @@
 #include "../include/alarmScreen.h"
 #include "../libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
 
-// Constructor
+// Constructor ==========================================
 AlarmScreen::AlarmScreen(void (*changeScreenLeft)(int screenNumber, int maxScreenNumber), void (*changeScreenRight)(int screenNumber, int maxScreenNumber)) {
     // Constructor
+    /*  Github copilot help:
+        alarmThread.start(callback(this, &AlarmScreen::checkAlarm));
+    */
 }
 
+// Alarm handling ========================================
+
+/* void AlarmScreen::checkAlarm() {
+        while (true) {
+            // Get the current time
+            time_t currentTime = time(NULL);
+
+            // Check if the current time is equal to the alarm time
+            if (currentTime == alarmTime) {
+                // If so, set off the alarm
+                setOffAlarm();
+            }
+
+            // Wait for a second before checking again
+            ThisThread::sleep_for(1s);
+        }
+    }
+*/
+
 void AlarmScreen::setAlarmTime() {
-    // Set the alarm time
+    // The fucntion to set the alarm time with values from setAlarmScreen
 }
 
 void AlarmScreen::setAlarmScreen() {
-    // Set the alarm screen
+    // Function to set the alarm time with the buttons and prompts from the user
 }
 
 void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
@@ -38,6 +60,9 @@ void AlarmScreen::rightButtonPressed() {
     switch (alarmState) {
     case ALARM_MENU:
         changeScreenRight();
+        break;
+    default:
+        break;
     }
 }
 

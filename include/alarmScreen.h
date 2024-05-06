@@ -6,6 +6,7 @@
 #define EXAM_PROJECT_ALARMSCREEN_H
 
 #include "../libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
+#include "mbed.h"
 
 #include <ctime>
 
@@ -27,6 +28,8 @@ public:
     // Constructor
     AlarmScreen(void (*changeScreenLeft)(int screenNumber, int maxScreenNumber), void (*changeScreenRight)(int screenNumber, int maxScreenNumber));
 
+    // alarm handling
+    // void checkAlarm();
     void setAlarmTime();
     void setAlarmScreen();
     void displayAlarmScreen(DFRobot_RGBLCD1602 &lcd);
@@ -41,7 +44,9 @@ public:
 private:
     bool alarmOn;
     bool alarmActive;
-    
+
+    time_t alarmTime;
+    Thread alarmThread;    
 
     void (*changeScreenLeft)(int screenNumber, int maxScreenNumber);
     void (*changeScreenRight)(int screenNumber, int maxScreenNumber);
