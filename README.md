@@ -5,9 +5,33 @@
 - Lars Angel Ohne
 - Aristidis Akritidis
 
+## Using TODO and FIXME Notations
 
-# Setting up mbed-os for use with Visual Studio Code
-## Setting up mbed-os with Visual Studio Code using PlatformIO
+In this project, we use `TODO` and `FIXME` notations to mark areas of the code that need attention.
+
+- `TODO`: This notation is used to indicate parts of the code that are not yet implemented or need to be completed. If you see a `TODO` comment, it means that the code is still a work in progress.
+
+Example:
+```cpp
+// TODO: Implement the function to calculate the sum of two numbers
+int sum(int a, int b) {
+    return 0; // This is a placeholder. The function needs to be implemented.
+}
+```
+
+- `FIXME`: This notation is used to mark parts of the code that have known issues or bugs that need to be fixed. If you see a FIXME comment, it means that the code has a problem that needs to be resolved.
+
+```cpp
+// FIXME: This function sometimes returns incorrect results
+int multiply(int a, int b) {
+    return a * b;
+}
+```
+
+Please use this notation in your code for easy navigation. *mvh Albert*
+
+## Setting up mbed-os for use with Visual Studio Code
+### Setting up mbed-os with Visual Studio Code using PlatformIO
 1. Install the PlatformIO extension in Visual Studio Code. You can do this by going to the Extensions view (Ctrl+Shift+X), searching for "PlatformIO", and clicking Install.
 
 2. Create a new PlatformIO project. Click on the PlatformIO icon in the Activity Bar, then click on "New Project". In the "Board" field, type the name of your mbed board (for example, "DISCO-L475VG-IOT01A"). In the "Framework" field, select "mbed". Then click "Finish".
