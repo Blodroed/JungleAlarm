@@ -56,6 +56,12 @@ int main()
     AlarmScreen alarmScreen(changeScreenLeft, changeScreenRight);
 
     while (true) {
+        // unassign all buttons
+        middleButton.fall(NULL);
+        leftButton.fall(NULL);
+        rightButton.fall(NULL);
+        specialButton.fall(NULL);
+        
         switch (screenNumber)
         {
         case 0:
