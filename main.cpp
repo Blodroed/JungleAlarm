@@ -7,6 +7,7 @@
 #include "libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
 #include "include/alarmScreen.h"
 
+#include <algorithm>
 #include <ctime>
 
 // alarm buzzer
@@ -53,7 +54,7 @@ int main()
     time_t unixtime = time(NULL);
 
     // Define the alarm screen object
-    AlarmScreen alarmScreen(screenNumber, maxScreenNumber, changeScreenLeft, changeScreenRight);
+    AlarmScreen alarmScreen(changeScreenLeft, changeScreenRight);
 
     while (true) {
         switch (screenNumber)
@@ -63,7 +64,10 @@ int main()
             // Bind buttons to alarm screen
             middleButton.fall(callback(&alarmScreen, &AlarmScreen::middleButtonPressed));
             leftButton.fall(callback(&alarmScreen, &AlarmScreen::leftButtonPressed));
-            rightButton.fall(callback(&alarmScreen, &AlarmScreen::rightButtonPressed));
+            rightButton.fall([screenNumber, maxScreenNumber, &alarmScreen]() {
+                alarmScreen.rightButtonPressed(screenNumber, maxScreenNumber);
+            });
+
             specialButton.fall(callback(&alarmScreen, &AlarmScreen::specialButtonPressed));
 
             // screen

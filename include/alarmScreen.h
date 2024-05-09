@@ -25,7 +25,7 @@ public:
     };
 
     // Constructor
-    AlarmScreen(int currentScreenNumber, int maxScreenNumber,void (*changeScreenLeft)(int screenNumber, int maxScreenNumber), void (*changeScreenRight)(int screenNumber, int maxScreenNumber));
+    AlarmScreen(void (*changeScreenLeft)(int screenNumber, int maxScreenNumber), void (*changeScreenRight)(int screenNumber, int maxScreenNumber));
 
     void setAlarmTime();
     void setAlarmScreen();
@@ -34,7 +34,7 @@ public:
     // button handling
     void leftButtonPressed();
     void middleButtonPressed();
-    void rightButtonPressed();
+    void rightButtonPressed(int currentScreenNumberm, int maxScreenNumber);
     void specialButtonPressed();
     
 
