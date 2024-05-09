@@ -75,6 +75,7 @@ int main()
             // Test screen hardcoded
             lcd.display();
             lcd.printf("Halla Balla");
+            lcd.clear();
         default:
             break;
         }
