@@ -59,8 +59,7 @@ int main()
         switch (screenNumber)
         {
         case 0:
-            lcd.clear();
-            
+        {
             // Bind buttons to alarm screen
             middleButton.fall(callback(&alarmScreen, &AlarmScreen::middleButtonPressed));
             leftButton.fall(callback(&alarmScreen, &AlarmScreen::leftButtonPressed));
@@ -68,14 +67,20 @@ int main()
             specialButton.fall(callback(&alarmScreen, &AlarmScreen::specialButtonPressed));
 
             // screen
-            alarmScreen.displayAlarmScreen(lcd);            
+            alarmScreen.displayAlarmScreen(lcd);
+            break;    
+        }
+                  
         case 1:
+        {
             // Bind buttons to news screen
 
             // Test screen hardcoded
             lcd.display();
             lcd.printf("Halla Balla");
             lcd.clear();
+            break;
+        }
         default:
             break;
         }

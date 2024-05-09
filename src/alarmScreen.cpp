@@ -21,8 +21,11 @@ void AlarmScreen::setAlarmScreen() {
 void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     // Display the alarm screen
     lcd.display();
+    lcd.clear();
     lcd.setCursor(0, 2);
     lcd.printf("ALARM");
+    ThisThread::sleep_for(100ms);
+    
 }
 
 void AlarmScreen::leftButtonPressed() {
@@ -37,7 +40,7 @@ void AlarmScreen::rightButtonPressed() {
     // Handle the right button press
     switch (stateOfAlarm) {
         case ALARM_MENU:
-            // do something
+            changeScreenRight();
 
             break;
         case SET_ALARM:
