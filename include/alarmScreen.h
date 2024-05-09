@@ -34,14 +34,16 @@ public:
     // button handling
     void leftButtonPressed();
     void middleButtonPressed();
-    void rightButtonPressed(alarmState state);
+    void rightButtonPressed();
     void specialButtonPressed();
     
 
 private:
     bool alarmOn;
     bool alarmActive;
-    
+
+    alarmState stateOfAlarm;
+    settingAlarmState stateOfSettingAlarm;
 
     void (*changeScreenLeft)(int screenNumber, int maxScreenNumber);
     void (*changeScreenRight)(int screenNumber, int maxScreenNumber);
