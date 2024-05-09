@@ -53,7 +53,7 @@ int main()
     time_t unixtime = time(NULL);
 
     // Define the alarm screen object
-    AlarmScreen alarmScreen(changeScreenLeft, changeScreenRight);
+    AlarmScreen alarmScreen(screenNumber, maxScreenNumber, changeScreenLeft, changeScreenRight);
 
     while (true) {
         switch (screenNumber)

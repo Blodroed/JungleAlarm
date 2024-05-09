@@ -6,8 +6,12 @@
 #include "../libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
 
 // Constructor
-AlarmScreen::AlarmScreen(void (*changeScreenLeft)(int screenNumber, int maxScreenNumber), void (*changeScreenRight)(int screenNumber, int maxScreenNumber)) {
+AlarmScreen::AlarmScreen(int currentScreenNumber, int maxScreenNumber,void (*changeScreenLeft)(int screenNumber, int maxScreenNumber), void (*changeScreenRight)(int screenNumber, int maxScreenNumber)) {
     // Constructor
+    this->changeScreenLeft = changeScreenLeft;
+    this->changeScreenRight = changeScreenRight;
+    this->currentScreenNumber = currentScreenNumber;
+    this->maxScreenNumber = maxScreenNumber;
 }
 
 void AlarmScreen::setAlarmTime() {
@@ -40,7 +44,7 @@ void AlarmScreen::rightButtonPressed() {
     // Handle the right button press
     switch (stateOfAlarm) {
         case ALARM_MENU:
-            changeScreenRight();
+            changeScreenRight(currentScreenNumber, maxScreenNumber);
 
             break;
         case SET_ALARM:
