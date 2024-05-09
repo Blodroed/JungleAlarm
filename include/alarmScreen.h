@@ -34,7 +34,7 @@ public:
     // button handling
     void leftButtonPressed();
     void middleButtonPressed();
-    void rightButtonPressed();
+    void rightButtonPressed(alarmState state);
     void specialButtonPressed();
     
 

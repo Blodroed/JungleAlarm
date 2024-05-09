@@ -33,11 +33,15 @@ void AlarmScreen::middleButtonPressed() {
     // Handle the middle button press
 }
 
-void AlarmScreen::rightButtonPressed() {
+void AlarmScreen::rightButtonPressed(alarmState state) {
     // Handle the right button press
-    switch (alarmState) {
+    switch (state) {
     case ALARM_MENU:
         changeScreenRight();
+        break;
+    case SET_ALARM:
+        // setAlarmTime();
+        break;
     }
 }
 
