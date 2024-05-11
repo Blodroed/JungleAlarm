@@ -11,11 +11,6 @@
 
 class AlarmScreen {
 public:
-    enum alarmState {
-        ALARM_MENU,
-        SET_ALARM
-    };
-
     enum settingAlarmState {
         SET_ALARM_HOUR1,
         SET_ALARM_HOUR2,
