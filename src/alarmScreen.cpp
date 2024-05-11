@@ -19,6 +19,7 @@ void AlarmScreen::setAlarmTime() {
 
 void AlarmScreen::setAlarmScreen() {
     // Set the alarm screen
+
 }
 
 void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {

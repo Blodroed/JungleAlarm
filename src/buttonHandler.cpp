@@ -10,13 +10,31 @@ void ButtonHandler::handleLeftButton() {
 }
 
 void ButtonHandler::handleMiddleButton() {
-    switch(currentState) {
-        case ScreenState::ALARM_SCREEN_VIEW: alarmScreen.setAlarmTime();  break;
-        case ScreenState::WEATHER_SCREEN: break;
-        case ScreenState::TEMP_HUMIDITY_SCREEN: break;
-        case ScreenState::NEWS_SCREEN: break;
-        default: break;
+    if (currentSubState == SubScreenState::NO_STATE) {
+        switch (currentState) {
+            case ScreenState::ALARM_SCREEN_VIEW:
+                alarmScreen.setAlarmTime();
+                currentSubState = SubScreenState::SET_ALARM_SCREEN;
+                break;
+            case ScreenState::WEATHER_SCREEN:
+                break;
+            case ScreenState::TEMP_HUMIDITY_SCREEN:
+                break;
+            case ScreenState::NEWS_SCREEN:
+                break;
+            default:
+                break;
         }
+        return;
+    }
+    switch (currentSubState) {
+        case SubScreenState::SET_ALARM_SCREEN:
+            break;
+        case SubScreenState::SET_IP_ADDRESS:
+            break;
+        default:
+            break;
+    }
 }
 
 void ButtonHandler::handleRightButton() {
