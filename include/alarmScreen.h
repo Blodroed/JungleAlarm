@@ -25,6 +25,9 @@ public:
     void setAlarmTime();
     void setAlarmScreen();
     void displayAlarmScreen(DFRobot_RGBLCD1602 &lcd);
+
+    // control functions for alarm
+    void muteAlarm();
     
 private:
     int currentScreenNumber;

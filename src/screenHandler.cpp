@@ -38,11 +38,7 @@ void ScreenHandler::changeSubScreen() {
 
 // Display alarm
 void ScreenHandler::displayAlarm(DFRobot_RGBLCD1602 &lcd) {
-    lcd.display();
-    lcd.setCursor(0, 1);
-    lcd.printf("Alarm");
-    ThisThread::sleep_for(100ms);
-    lcd.clear();
+    
 }
 
 // Getters

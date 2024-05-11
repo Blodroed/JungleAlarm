@@ -57,7 +57,7 @@ int main()
     // initilization
     lcd.init();
     lcd.setRGB(0, 0, 255);  // Set the LCD background color to blue
-    set_time(1046703600);   // set RTC to the birth of Albert
+    set_time(1046673700);   // set RTC to the birth of Albert
     time_t unixtime = time(NULL);
 
     // Define the alarm screen object
@@ -71,7 +71,7 @@ int main()
         switch (buttonHandler.getCurrentState()) {
         case ScreenState::ALARM_SCREEN_VIEW: {
             // screen
-            screenHandler.displayAlarm(lcd);
+            alarmScreen.displayAlarmScreen(lcd);
             break;
         }
         
