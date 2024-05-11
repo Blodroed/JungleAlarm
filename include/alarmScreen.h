@@ -25,14 +25,7 @@ public:
     void setAlarmTime();
     void setAlarmScreen();
     void displayAlarmScreen(DFRobot_RGBLCD1602 &lcd);
-
-    // button handling
-    void leftButtonPressed();
-    void middleButtonPressed();
-    void rightButtonPressed(int currentScreenNumberm, int maxScreenNumber);
-    void specialButtonPressed();
     
-
 private:
     int currentScreenNumber;
     int maxScreenNumber;
@@ -40,7 +33,6 @@ private:
     bool alarmOn;
     bool alarmActive;
 
-    alarmState stateOfAlarm;
     settingAlarmState stateOfSettingAlarm;
 
     void (*changeScreenLeft)(int screenNumber, int maxScreenNumber);

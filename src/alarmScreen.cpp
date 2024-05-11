@@ -10,7 +10,6 @@ AlarmScreen::AlarmScreen(void (*changeScreenLeft)(int screenNumber, int maxScree
     // Constructor
     this->changeScreenLeft = changeScreenLeft;
     this->changeScreenRight = changeScreenRight;
-    stateOfAlarm = ALARM_MENU;
     
 }
 
@@ -30,33 +29,4 @@ void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     lcd.printf("ALARM");
     ThisThread::sleep_for(100ms);
     
-}
-
-void AlarmScreen::leftButtonPressed() {
-    // Handle the left button press
-}
-
-void AlarmScreen::middleButtonPressed() {
-    // Handle the middle button press
-}
-
-void AlarmScreen::rightButtonPressed(int currentScreenNumber, int maxScreenNumber) {
-    // Handle the right button press
-    switch (stateOfAlarm) {
-        case ALARM_MENU:
-            changeScreenRight(currentScreenNumber, maxScreenNumber);
-
-            break;
-        case SET_ALARM:
-            // do something
-            break;
-        default:
-            break;
-
-    }
-
-}
-
-void AlarmScreen::specialButtonPressed() {
-    // Handle the special button press
 }
