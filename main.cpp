@@ -68,24 +68,37 @@ int main()
     ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, screenHandler);
 
     while (true) {
-        switch (screenHandler.getCurrentScreenNumber()) {
-        case 0: {
-            buttonHandler.handleLeftButton();
-            buttonHandler.handleMiddleButton();
-            buttonHandler.handleRightButton();
-            buttonHandler.handleSpecialButton();
+        switch (buttonHandler.getCurrentState()) {
+        case ScreenState::ALARM_SCREEN_VIEW: {
             // screen
             screenHandler.displayAlarm(lcd);
             break;
         }
-        case 1:
-        {
+        
+        case ScreenState::TEMP_HUMIDITY_SCREEN: {
             // Bind buttons to news screen
 
             // Test screen hardcoded
             lcd.display();
-            lcd.printf("Halla Balla");
+            lcd.printf("TempHum");
             lcd.clear();
+            ThisThread::sleep_for(100ms);
+            break;
+        }
+        case ScreenState::WEATHER_SCREEN: {
+            // test screen hardcoded
+            lcd.display();
+            lcd.printf("Weather");
+            lcd.clear();
+            ThisThread::sleep_for(100ms);
+            break;
+        }
+        case ScreenState::NEWS_SCREEN: {
+            // test screen hardcoded
+            lcd.display();
+            lcd.printf("News");
+            lcd.clear();
+            ThisThread::sleep_for(100ms);
             break;
         }
         default:

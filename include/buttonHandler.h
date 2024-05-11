@@ -32,18 +32,20 @@ public:
         specialButton.rise(callback(this,&ButtonHandler::handleSpecialButton));
     }
 
+    // handling button presses
     void handleLeftButton();
-
     void handleMiddleButton();
-
     void handleRightButton();
-
     void handleSpecialButton();
 
+    // changing screen states
     void changeStateLeft();
     void changeStateRight();
-
     void changeSubState();
+
+    // getters
+    ScreenState getCurrentState() { return currentState; }
+    SubScreenState getCurrentSubState() { return currentSubState; }
 
 private:
     ScreenState currentState;

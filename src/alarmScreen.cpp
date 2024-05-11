@@ -27,6 +27,4 @@ void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     lcd.clear();
     lcd.setCursor(0, 2);
     lcd.printf("ALARM");
-    ThisThread::sleep_for(100ms);
-    
 }
