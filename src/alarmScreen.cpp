@@ -40,7 +40,7 @@ void AlarmScreen::middleButtonPressed() {
     // Handle the middle button press
 }
 
-void AlarmScreen::rightButtonPressed(int currentScreenNumberm, int maxScreenNumber) {
+void AlarmScreen::rightButtonPressed(int currentScreenNumber, int maxScreenNumber) {
     // Handle the right button press
     switch (stateOfAlarm) {
         case ALARM_MENU:

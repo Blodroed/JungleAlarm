@@ -9,6 +9,9 @@
 
 #include <algorithm>
 #include <ctime>
+#include <exception>
+
+#include "buttonHandler.h"
 
 // alarm buzzer
 PwmOut alarmBuzzer(D5);
@@ -43,33 +46,36 @@ void changeScreenRight(int screenNumber, int maxScreenNumber) {
 
 int main()
 {
+    /*
     // Define variables
     int screenNumber = 0;       // you can change this if you want to start on another screen
     int maxScreenNumber = 4;    // max screen should probably be a global variable outside of main
-
+*/
     // initilization
     lcd.init();
     lcd.setRGB(0, 0, 255);  // Set the LCD background color to blue
     set_time(1046703600);   // set RTC to the birth of Albert
     time_t unixtime = time(NULL);
 
-    // Define the alarm screen object
+// Define the alarm screen object
     AlarmScreen alarmScreen(changeScreenLeft, changeScreenRight);
+    ScreenHandler screenHandler(0,3,0,2);
+    //Button hanlder object
+    ButtonHandler buttonHanlder(alarmScreen, screenHandler);
 
     while (true) {
-        switch (screenNumber)
+        switch (screenHandler.getCurrentScreenNumber())
         {
         case 0:
         {
             // Bind buttons to alarm screen
-            middleButton.fall(callback(&alarmScreen, &AlarmScreen::middleButtonPressed));
-            leftButton.fall(callback(&alarmScreen, &AlarmScreen::leftButtonPressed));
-            rightButton.fall([screenNumber, maxScreenNumber, &alarmScreen]() {
-                alarmScreen.rightButtonPressed(screenNumber, maxScreenNumber);
-            });
+            int currentScreen = screenHandler.getCurrentScreenNumber();
+            int maxScreenNumber = screenHandler.getMaxScreenNumber();
 
-            specialButton.fall(callback(&alarmScreen, &AlarmScreen::specialButtonPressed));
-
+            buttonHanlder.handleLeftButton();
+            buttonHanlder.handleMiddleButton();
+            buttonHanlder.handleRightButton();
+            buttonHanlder.handleSpecialButton();
             // screen
             alarmScreen.displayAlarmScreen(lcd);
             break;    
