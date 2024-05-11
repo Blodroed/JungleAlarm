@@ -20,6 +20,9 @@ PwmOut alarmBuzzer(D5);
 I2C lcdI2C(D14, D15);
 DFRobot_RGBLCD1602 lcd(&lcdI2C);
 
+// buffered serial for debugging
+BufferedSerial pc(USBTX, USBRX);
+
 // Define buttons with interrupts
 InterruptIn leftButton(D0, PullUp); 
 InterruptIn middleButton(D1, PullUp);
@@ -62,24 +65,18 @@ int main()
     ScreenHandler screenHandler(0,3,0,2);
 
     //Button handler object
-    ButtonHandler buttonHandler(alarmScreen, screenHandler);
+    ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, screenHandler);
 
     while (true) {
-        switch (screenHandler.getCurrentScreenNumber())
-        {
-        case 0:
-        {
-            // Bind buttons to alarm screen
-            int currentScreen = screenHandler.getCurrentScreenNumber();
-            int maxScreenNumber = screenHandler.getMaxScreenNumber();
-
+        switch (screenHandler.getCurrentScreenNumber()) {
+        case 0: {
             buttonHandler.handleLeftButton();
             buttonHandler.handleMiddleButton();
             buttonHandler.handleRightButton();
             buttonHandler.handleSpecialButton();
             // screen
-            alarmScreen.displayAlarmScreen(lcd);
-            break;    
+            screenHandler.displayAlarm(lcd);
+            break;
         }
         case 1:
         {
@@ -92,6 +89,10 @@ int main()
             break;
         }
         default:
+            lcd.display();
+            lcd.printf("Default is being run");
+            ThisThread::sleep_for(100ms);
+            lcd.clear();
             break;
         }
     }

@@ -1,12 +1,14 @@
 #include "screenHandler.h"
+#include "../libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
 
-ScreenHandler::ScreenHandler(int maxScreenNumber, int currentScreenNumber, int currentSubScreenNumber, int maxSubScreenNumber) {
+ScreenHandler::ScreenHandler(int currentScreenNumber, int maxScreenNumber, int currentSubScreenNumber, int maxSubScreenNumber) {
     this->maxScreenNumber = maxScreenNumber;
     this->currentScreenNumber = currentScreenNumber;
     this->currentSubScreenNumber = currentSubScreenNumber;
     this->maxSubScreenNumber = maxSubScreenNumber;
 }
 
+// changing screen functions
 void ScreenHandler::changeScreenRight() {
     currentScreenNumber++;
     if(currentScreenNumber > maxScreenNumber) {
@@ -23,7 +25,6 @@ void ScreenHandler::changeScreenLeft() {
 }
 
 void ScreenHandler::changeSubScreen() {
-    
     if(currentSubScreenNumber > 0) {
         currentSubScreenNumber = 0;
     } else {
@@ -35,6 +36,16 @@ void ScreenHandler::changeSubScreen() {
     }
 }
 
+// Display alarm
+void ScreenHandler::displayAlarm(DFRobot_RGBLCD1602 &lcd) {
+    lcd.display();
+    lcd.setCursor(0, 1);
+    lcd.printf("Alarm");
+    ThisThread::sleep_for(100ms);
+    lcd.clear();
+}
+
+// Getters
 int ScreenHandler::getCurrentScreenNumber() {
     return currentScreenNumber;
 }

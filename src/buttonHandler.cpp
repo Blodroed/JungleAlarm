@@ -1,7 +1,6 @@
 #include "buttonHandler.h"
 
 void ButtonHandler::handleLeftButton() {
-
     if(currentSubState == SubScreenState::NO_STATE) {
         switch(currentState) {
             case ScreenState::ALARM_SCREEN_VIEW: changeStateLeft(); break;

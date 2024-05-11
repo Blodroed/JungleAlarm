@@ -23,20 +23,9 @@ enum class SubScreenState {
 class ButtonHandler {
 public:
 
-    ButtonHandler(AlarmScreen &alarmScreen_, ScreenHandler screenHandler_/*,WeatherScreen &weatherScreen_, 
-                  TempHumidityScreen &tempHumidityScreen_, NewsScreen &newsScreen_*/
-                    ) : alarmScreen(alarmScreen_),
-        leftButton(D0, PullUp),
-        middleButton(D1, PullUp),
-        rightButton(D2, PullUp),
-        specialButton(D4, PullUp),
-        currentState(ScreenState::ALARM_SCREEN_VIEW),
-        currentSubState(SubScreenState::NO_STATE),
-        screenHandler(screenHandler_)
-        /*weatherScreen(weatherScreen_),
-        temphumidityScreen(tempHumidityScreen_),
-        newsScreen(newsScreen_)*/{
-        
+    ButtonHandler(InterruptIn& leftButton_, InterruptIn& middleButton_, InterruptIn& rightButton_, InterruptIn& specialButton_, AlarmScreen &alarmScreen_, ScreenHandler screenHandler_)
+            : leftButton(leftButton_), middleButton(middleButton_), rightButton(rightButton_), specialButton(specialButton_), alarmScreen(alarmScreen_), screenHandler(screenHandler_), currentState(ScreenState::ALARM_SCREEN_VIEW), currentSubState(SubScreenState::NO_STATE) {
+
         leftButton.rise(callback(this,&ButtonHandler::handleLeftButton));
         middleButton.rise(callback(this,&ButtonHandler::handleMiddleButton));
         rightButton.rise(callback(this,&ButtonHandler::handleRightButton));
@@ -65,8 +54,8 @@ private:
     //NewsScreen &newsScreen;
     ScreenHandler screenHandler;
 
-    InterruptIn leftButton;
-    InterruptIn middleButton;
-    InterruptIn rightButton;
-    InterruptIn specialButton;
+    InterruptIn &leftButton;
+    InterruptIn &middleButton;
+    InterruptIn &rightButton;
+    InterruptIn &specialButton;
 };
