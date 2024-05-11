@@ -24,7 +24,8 @@ class ButtonHandler {
 public:
 
     ButtonHandler(AlarmScreen &alarmScreen_, ScreenHandler screenHandler_/*,WeatherScreen &weatherScreen_, 
-                  TempHumidityScreen &tempHumidityScreen_, NewsScreen &newsScreen_*/) : alarmScreen(alarmScreen_),
+                  TempHumidityScreen &tempHumidityScreen_, NewsScreen &newsScreen_*/
+                    ) : alarmScreen(alarmScreen_),
         leftButton(D0, PullUp),
         middleButton(D1, PullUp),
         rightButton(D2, PullUp),
@@ -68,8 +69,4 @@ private:
     InterruptIn middleButton;
     InterruptIn rightButton;
     InterruptIn specialButton;
-
-    
-
-
 };

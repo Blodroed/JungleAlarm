@@ -50,18 +50,19 @@ int main()
     // Define variables
     int screenNumber = 0;       // you can change this if you want to start on another screen
     int maxScreenNumber = 4;    // max screen should probably be a global variable outside of main
-*/
+    */
     // initilization
     lcd.init();
     lcd.setRGB(0, 0, 255);  // Set the LCD background color to blue
     set_time(1046703600);   // set RTC to the birth of Albert
     time_t unixtime = time(NULL);
 
-// Define the alarm screen object
+    // Define the alarm screen object
     AlarmScreen alarmScreen(changeScreenLeft, changeScreenRight);
     ScreenHandler screenHandler(0,3,0,2);
-    //Button hanlder object
-    ButtonHandler buttonHanlder(alarmScreen, screenHandler);
+
+    //Button handler object
+    ButtonHandler buttonHandler(alarmScreen, screenHandler);
 
     while (true) {
         switch (screenHandler.getCurrentScreenNumber())
@@ -72,15 +73,14 @@ int main()
             int currentScreen = screenHandler.getCurrentScreenNumber();
             int maxScreenNumber = screenHandler.getMaxScreenNumber();
 
-            buttonHanlder.handleLeftButton();
-            buttonHanlder.handleMiddleButton();
-            buttonHanlder.handleRightButton();
-            buttonHanlder.handleSpecialButton();
+            buttonHandler.handleLeftButton();
+            buttonHandler.handleMiddleButton();
+            buttonHandler.handleRightButton();
+            buttonHandler.handleSpecialButton();
             // screen
             alarmScreen.displayAlarmScreen(lcd);
             break;    
         }
-                  
         case 1:
         {
             // Bind buttons to news screen
