@@ -11,9 +11,9 @@ void ButtonHandler::handleLeftButton() {
 
 void ButtonHandler::handleMiddleButton() {
     if (currentSubState == SubScreenState::NO_STATE) {
+    // DO NOT I REPEAT DO NOT RUN FUNCTIONS INSIDE THIS SWITCH CASE
         switch (currentState) {
             case ScreenState::ALARM_SCREEN_VIEW:
-                alarmScreen.setAlarmTime();
                 currentSubState = SubScreenState::SET_ALARM_SCREEN;
                 break;
             case ScreenState::WEATHER_SCREEN:

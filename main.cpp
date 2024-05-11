@@ -47,31 +47,32 @@ void changeScreenRight(int screenNumber, int maxScreenNumber) {
 }
 
 
+
 int main()
 {
-    /*
-    // Define variables
-    int screenNumber = 0;       // you can change this if you want to start on another screen
-    int maxScreenNumber = 4;    // max screen should probably be a global variable outside of main
-    */
     // initilization
     lcd.init();
     lcd.setRGB(0, 0, 255);  // Set the LCD background color to blue
-    set_time(1046673700);   // set RTC to the birth of Albert
+    set_time(1046674700);   // set RTC to the birth of Albert
     time_t unixtime = time(NULL);
 
     // Define the alarm screen object
-    AlarmScreen alarmScreen(changeScreenLeft, changeScreenRight);
+    AlarmScreen alarmScreen;
     ScreenHandler screenHandler(0,3,0,2);
 
     //Button handler object
-    ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, screenHandler);
+    ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, screenHandler, lcd);
 
     while (true) {
         switch (buttonHandler.getCurrentState()) {
         case ScreenState::ALARM_SCREEN_VIEW: {
             // screen
-            alarmScreen.displayAlarmScreen(lcd);
+            if(buttonHandler.getCurrentSubState() == SubScreenState::NO_STATE) {
+                alarmScreen.displayAlarmScreen(lcd);
+            } else if(buttonHandler.getCurrentSubState() == SubScreenState::SET_ALARM_SCREEN) {
+                alarmScreen.displaySetAlarmScreen(lcd);
+            }
+            
             break;
         }
         

@@ -8,20 +8,29 @@
 #include <ctime>
 
 // Constructor
-AlarmScreen::AlarmScreen(void (*changeScreenLeft)(int screenNumber, int maxScreenNumber), void (*changeScreenRight)(int screenNumber, int maxScreenNumber)) {
-    // Constructor
-    this->changeScreenLeft = changeScreenLeft;
-    this->changeScreenRight = changeScreenRight;
-    
-}
+AlarmScreen::AlarmScreen(){};
 
 void AlarmScreen::setAlarmTime() {
     // Set the alarm time
 }
 
-void AlarmScreen::setAlarmScreen() {
-    // Set the alarm screen
+void AlarmScreen::displaySetAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
+    // the screen where the user can set the alarm using
+    // left button will decrease the value, and right button will increase the value
+    // middle button will change the state to the next state and on accept it will
+    // set the alarm time
 
+    lcd.display();
+    lcd.clear();
+    lcd.setCursor(0, 0);  // Set cursor to line 1 (top line)
+    lcd.printf("Set Alarm Time");
+
+    lcd.setCursor(0, 1);
+    lcd.printf("Increase with right button, decrease with left button");
+    for (int i = 0; i < 26; i++) {
+        lcd.scrollDisplayLeft();
+        ThisThread::sleep_for(200ms);
+    }
 }
 
 void AlarmScreen::muteAlarm() {
@@ -47,7 +56,7 @@ void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     lcd.printf(buffer);  // Print the formatted time
 
     // Display the alarm screen
-    lcd.setCursor(0, 2);
+    lcd.setCursor(0, 1);
     lcd.printf("ALARM");
 
     ThisThread::sleep_for(200ms);

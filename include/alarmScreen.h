@@ -20,26 +20,20 @@ public:
     };
 
     // Constructor
-    AlarmScreen(void (*changeScreenLeft)(int screenNumber, int maxScreenNumber), void (*changeScreenRight)(int screenNumber, int maxScreenNumber));
+    AlarmScreen();
 
     void setAlarmTime();
-    void setAlarmScreen();
+    void displaySetAlarmScreen(DFRobot_RGBLCD1602 &lcd);
     void displayAlarmScreen(DFRobot_RGBLCD1602 &lcd);
 
     // control functions for alarm
     void muteAlarm();
     
 private:
-    int currentScreenNumber;
-    int maxScreenNumber;
-
     bool alarmOn;
     bool alarmActive;
 
     settingAlarmState stateOfSettingAlarm;
-
-    void (*changeScreenLeft)(int screenNumber, int maxScreenNumber);
-    void (*changeScreenRight)(int screenNumber, int maxScreenNumber);
 };
 
 
