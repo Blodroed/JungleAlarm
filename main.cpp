@@ -80,25 +80,25 @@ int main()
 
             // Test screen hardcoded
             lcd.display();
-            lcd.printf("TempHum");
-            lcd.clear();
+            lcd.printf("Temphum");
             ThisThread::sleep_for(100ms);
+            lcd.clear();
             break;
         }
         case ScreenState::WEATHER_SCREEN: {
             // test screen hardcoded
             lcd.display();
             lcd.printf("Weather");
-            lcd.clear();
             ThisThread::sleep_for(100ms);
+            lcd.clear();
             break;
         }
         case ScreenState::NEWS_SCREEN: {
             // test screen hardcoded
             lcd.display();
             lcd.printf("News");
-            lcd.clear();
             ThisThread::sleep_for(100ms);
+            lcd.clear();
             break;
         }
         default:
