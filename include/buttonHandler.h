@@ -48,6 +48,8 @@ public:
     ScreenState getCurrentState() { return currentState; }
     SubScreenState getCurrentSubState() { return currentSubState; }
 
+    //Public debounce timer. Used in main simply to initialize the timer.
+
 private:
     ScreenState currentState;
     SubScreenState currentSubState;
@@ -61,6 +63,8 @@ private:
     InterruptIn &middleButton;
     InterruptIn &rightButton;
     InterruptIn &specialButton;
+
+    //Variables for debouncing buttons
 
     DFRobot_RGBLCD1602 &lcd;
 };

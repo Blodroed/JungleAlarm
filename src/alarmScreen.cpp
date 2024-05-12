@@ -20,16 +20,22 @@ void AlarmScreen::displaySetAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     // middle button will change the state to the next state and on accept it will
     // set the alarm time
 
+    //There is a MAX number of characters per line of 40. 
+    //Any more than that and the rows start to bleed into eachother and override eachother
+    //Limit any message on a given line to 40 characters or less
+    
     lcd.display();
     lcd.clear();
     lcd.setCursor(0, 0);  // Set cursor to line 1 (top line)
     lcd.printf("Set Alarm Time");
-
     lcd.setCursor(0, 1);
-    lcd.printf("Increase with right button, decrease with left button");
-    for (int i = 0; i < 26; i++) {
+    
+    char message[] = "Right button: add, left button: remove";
+    lcd.printf(message);
+    ThisThread::sleep_for(1000ms);
+    for (int i = 0; i < strlen(message)-15; i++) {
         lcd.scrollDisplayLeft();
-        ThisThread::sleep_for(200ms);
+        ThisThread::sleep_for(300ms);
     }
 }
 
@@ -47,7 +53,7 @@ void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
 
     // format the time correctly
     char buffer[42] = {0};
-    strftime(buffer, 32, "%a %d %b %H:%M", localtime(&seconds));
+    strftime(buffer, 42, "%a %d %b %R", localtime(&seconds));
 
     // Display the time on the LCD
     lcd.display();

@@ -1,4 +1,6 @@
 #include "buttonHandler.h"
+#include <chrono>
+#include <ratio>
 
 void ButtonHandler::handleLeftButton() {
     switch(currentSubState) {
@@ -7,11 +9,12 @@ void ButtonHandler::handleLeftButton() {
         case SubScreenState::SET_IP_ADDRESS: break;
         default: break;
     }
+
 }
 
 void ButtonHandler::handleMiddleButton() {
     if (currentSubState == SubScreenState::NO_STATE) {
-    // DO NOT I REPEAT DO NOT RUN FUNCTIONS INSIDE THIS SWITCH CASE
+        // DO NOT I REPEAT DO NOT RUN FUNCTIONS INSIDE THIS SWITCH CASE
         switch (currentState) {
             case ScreenState::ALARM_SCREEN_VIEW:
                 currentSubState = SubScreenState::SET_ALARM_SCREEN;
@@ -27,14 +30,12 @@ void ButtonHandler::handleMiddleButton() {
         }
         return;
     }
-    switch (currentSubState) {
-        case SubScreenState::SET_ALARM_SCREEN:
-            break;
-        case SubScreenState::SET_IP_ADDRESS:
-            break;
-        default:
-            break;
-    }
+    if(currentSubState != SubScreenState::NO_STATE) {
+        currentSubState = SubScreenState::NO_STATE;
+        return;
+    }    
+    
+    
 }
 
 void ButtonHandler::handleRightButton() {
@@ -44,6 +45,7 @@ void ButtonHandler::handleRightButton() {
         case SubScreenState::SET_IP_ADDRESS: break;
         default: break;
     }
+    
 }
 
 void ButtonHandler::handleSpecialButton() {

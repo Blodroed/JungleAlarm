@@ -53,7 +53,7 @@ int main()
     // initilization
     lcd.init();
     lcd.setRGB(0, 0, 255);  // Set the LCD background color to blue
-    set_time(1046674700);   // set RTC to the birth of Albert
+    set_time(1046674880);   // set RTC to the birth of Albert
     time_t unixtime = time(NULL);
 
     // Define the alarm screen object
