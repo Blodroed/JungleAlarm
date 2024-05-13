@@ -44,7 +44,6 @@ private:
 
     // alarm time as a struct
     struct tm alarmTime;
-    struct tm muteTime;
 
     settingAlarmState stateOfSettingAlarm;
 };
