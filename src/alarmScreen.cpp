@@ -13,29 +13,66 @@ AlarmScreen::AlarmScreen(){
     alarmSnoozed = false;
     alarmMuted = false;
     alarmActive = false;
-    alarmHour = 12;
-    alarmMinute = 15;
+    alarmTime.tm_hour = 8;
+    alarmTime.tm_min = 0;
     stateOfSettingAlarm = SET_ALARM_HOUR1;
 };
 
-void AlarmScreen::setAlarmTime() {
+void AlarmScreen::setAlarmTime(const int hour, const int minutes) {
     // Set the alarm time
+    alarmTime.tm_hour = hour;
+    alarmTime.tm_min = minutes;
 }
 
 void AlarmScreen::checkAlarmTime() {
-    // Check if the alarm time is equal to or 5 min above the current time
+    // initialized snooze time to 5 minutes
+    int snoozeMinutes = 0;
+
+    // get the current time and converting it to a struct
     time_t seconds = time(NULL);
-    time_t stopTime = seconds + (10 * 60);  // adding 10 minutes to default stoptime
+    struct tm* now = localtime(&seconds);
 
+    // muteTime is the time the alarm will be muted
+    struct tm* muteTime = localtime(&seconds);
 
-    if ((now->tm_hour == alarmHour && now->tm_min >= alarmMinute) && (now->tm_hour == alarmHour && now->tm_min <= alarmMinute + 10)) {
-        // Alarm is active
-        alarmActive = true;
+    // set mute time to be equal to the alarm time + 10 minutes with some edge cases
+    if (alarmTime.tm_hour == 23 && alarmTime.tm_min >= 50) {
+        muteTime->tm_hour = 0;
+        muteTime->tm_min = alarmTime.tm_min - 50;
+    } else if (alarmTime.tm_min >= 50) {
+        muteTime->tm_hour = alarmTime.tm_hour + 1;
+        muteTime->tm_min = alarmTime.tm_min - 50;
     }
-    else {
-        // Alarm is not active
+
+    // if alarm is snoozed we should add 5 minutes to the alarm time
+    struct tm* adjustedMutetime = muteTime;
+    if (alarmSnoozed) {
+        snoozeMinutes = 5;
+        if (muteTime->tm_min + snoozeMinutes >= 60) {       // edge casing if the snooze time is more than 60 minutes
+            if (muteTime->tm_hour == 23) {
+                adjustedMutetime->tm_hour = 0;
+            } else {
+                adjustedMutetime->tm_hour = muteTime->tm_hour + 1;
+            }
+            adjustedMutetime->tm_min = muteTime->tm_min + snoozeMinutes - 60;
+        } else {
+            adjustedMutetime->tm_min += snoozeMinutes;
+        }
+    }
+
+    // setting the alarm off if the alarm time is equal to the current time
+    // and adding snooze time to the alarm time if applicable
+    // Long if statement short: 
+    // alarmTime.tm_hour <= now->tm_hour <= adjustedMutetime->tm_hour
+    // alarmTime.tm_min <= now->tm_min <= adjustedMutetime->tm_min
+    if (alarmTime.tm_hour <= now->tm_hour && now->tm_hour <= adjustedMutetime->tm_hour) {
+        if (alarmTime.tm_min <= now->tm_min && now->tm_min <= adjustedMutetime->tm_min) {
+            alarmActive = true;
+        }
+    } else {
         alarmActive = false;
     }
+    ThisThread::sleep_for(1000ms);
 }
 
 void AlarmScreen::displaySetAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
