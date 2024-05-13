@@ -9,16 +9,16 @@
 
 #include <ctime>
 
-class AlarmScreen {
-public:
-    enum settingAlarmState {
+enum class SettingAlarmState {
         SET_ALARM_HOUR1,
         SET_ALARM_HOUR2,
         SET_ALARM_MINUTE1,
         SET_ALARM_MINUTE2,
         ACCEPT
-    };
+};
 
+class AlarmScreen {
+public:
     // Constructor
     AlarmScreen();
 
@@ -28,12 +28,28 @@ public:
 
     // control functions for alarm
     void muteAlarm();
+
+    SettingAlarmState changeTimeState();
+
+    SettingAlarmState stateOfSettingAlarm;
+
+    int alarmHour;
+    int alarmMinute;
     
+    int setHour1 = 0;
+    int setHour2 = 0;
+    int setMin1 = 0;
+    int setMin2 = 0;
+
 private:
     bool alarmOn;
     bool alarmActive;
 
-    settingAlarmState stateOfSettingAlarm;
+    
+
+ 
+
+
 };
 
 
