@@ -14,6 +14,21 @@ void AlarmScreen::setAlarmTime() {
     // Set the alarm time
 }
 
+void AlarmScreen::checkAlarmTime() {
+    // Check if the alarm time is equal to or 5 min above the current time
+    time_t seconds = time(NULL);
+    struct tm* now = localtime(&seconds);
+
+    if ((now->tm_hour == alarmHour && now->tm_min >= alarmMinute) && (now->tm_hour == alarmHour && now->tm_min <= alarmMinute + 5)) {
+        // Alarm is active
+        alarmActive = true;
+    }
+    else {
+        // Alarm is not active
+        alarmActive = false;
+    }
+}
+
 void AlarmScreen::displaySetAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     // the screen where the user can set the alarm using
     // left button will decrease the value, and right button will increase the value
