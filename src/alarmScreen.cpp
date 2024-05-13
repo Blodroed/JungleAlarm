@@ -8,7 +8,15 @@
 #include <ctime>
 
 // Constructor
-AlarmScreen::AlarmScreen(){};
+AlarmScreen::AlarmScreen(){
+    alarmOn = false;
+    alarmSnoozed = false;
+    alarmMuted = false;
+    alarmActive = false;
+    alarmHour = 12;
+    alarmMinute = 15;
+    stateOfSettingAlarm = SET_ALARM_HOUR1;
+};
 
 void AlarmScreen::setAlarmTime() {
     // Set the alarm time
@@ -17,9 +25,10 @@ void AlarmScreen::setAlarmTime() {
 void AlarmScreen::checkAlarmTime() {
     // Check if the alarm time is equal to or 5 min above the current time
     time_t seconds = time(NULL);
-    struct tm* now = localtime(&seconds);
+    time_t stopTime = seconds + (10 * 60);  // adding 10 minutes to default stoptime
 
-    if ((now->tm_hour == alarmHour && now->tm_min >= alarmMinute) && (now->tm_hour == alarmHour && now->tm_min <= alarmMinute + 5)) {
+
+    if ((now->tm_hour == alarmHour && now->tm_min >= alarmMinute) && (now->tm_hour == alarmHour && now->tm_min <= alarmMinute + 10)) {
         // Alarm is active
         alarmActive = true;
     }
