@@ -107,6 +107,58 @@ void AlarmScreen::muteAlarm() {
     // here we should update the bool alarmActive to false and stop the alarm thread
 }
 
+void AlarmScreen::disableAlarm() {
+    // Disable the alarm
+    // here we should update the bool alarmOn to false and stop the alarm thread
+}
+
+void AlarmScreen::enableAlarm() {
+    // Enable the alarm
+    // here we should update the bool alarmOn to true and start the alarm thread
+}
+
+void AlarmScreen::snoozeAlarm() {
+    // Snooze the alarm
+    // here we should update the bool alarmSnoozed to true and add 5 minutes to the alarm time
+}
+
+void AlarmScreen::alarmTrigger() {
+    // Trigger the alarm
+    // here we should start the alarm thread and play the alarm sound
+
+    // ==== ChatGPT thread Start suggestion ====
+    /*
+     * // Define a boolean variable to keep track of whether the alarm is set
+     * bool isAlarmSet = false;
+     * 
+     * // Define the alarm check thread
+     * Thread alarmCheckThread;
+
+     * while (true) {
+     *     switch (buttonHandler.getCurrentState()) {
+     *     case ScreenState::ALARM_SCREEN_VIEW: {
+     *         // screen
+     *         if(buttonHandler.getCurrentSubState() == SubScreenState::NO_STATE) {
+     *             alarmScreen.displayAlarmScreen(lcd);
+     *         } else if(buttonHandler.getCurrentSubState() == SubScreenState::SET_ALARM_SCREEN) {
+     *             alarmScreen.displaySetAlarmScreen(lcd);
+     * 
+     *             // Set the alarm
+     *             isAlarmSet = true;
+     * 
+     *             // Create the alarm check thread if it's not already running
+     *             if (!alarmCheckThread.get_state()) {
+     *                 alarmCheckThread.start(callback(&alarmCheckFunction));
+     *             }
+     *         }
+     *  
+     *         break;
+     *     }
+     *     // Rest of your code...
+     * }
+     */
+}
+
 void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     // get seconds since epoch
     time_t seconds = rtc_read();

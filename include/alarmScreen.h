@@ -33,6 +33,8 @@ public:
     void muteAlarm();
     void disableAlarm();
     void enableAlarm();
+    void snoozeAlarm();
+    void alarmTrigger();
 
     void setAlarmTime(const int hour, const int minutes);
 
@@ -46,6 +48,7 @@ private:
     bool alarmSnoozed;
     bool alarmMuted;
     bool alarmActive;
+    bool isAlarmSet;
 
     // alarm time as a struct
     struct tm alarmTime;
