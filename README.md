@@ -1,73 +1,54 @@
-![](./resources/official_armmbed_example_badge.png)
-# Blinky Mbed OS example
+# Welcome to JungleAlarm
+*this is the project ikt104 project for:*
+- Albert Salvesen-Orø
+- Marcus Hagen
+- Lars Angel Ohne
+- Aristidis Akritidis
 
-The example project is part of the [Arm Mbed OS Official Examples](https://os.mbed.com/code/) and is the [getting started example for Mbed OS](https://os.mbed.com/docs/mbed-os/latest/quick-start/index.html). It contains an application that repeatedly blinks an LED on supported [Mbed boards](https://os.mbed.com/platforms/).
+## Using TODO and FIXME Notations
 
-You can build the project with all supported [Mbed OS build tools](https://os.mbed.com/docs/mbed-os/latest/tools/index.html). However, this example project specifically refers to the command-line interface tools, [Arm Mbed CLI 1](https://github.com/ARMmbed/mbed-cli#installing-mbed-cli) and [Mbed CLI 2](https://github.com/ARMmbed/mbed-tools#installation).
+In this project, we use `TODO` and `FIXME` notations to mark areas of the code that need attention.
 
-(Note: To see a rendered example you can import into the Arm Online Compiler, please see our [import quick start](https://os.mbed.com/docs/mbed-os/latest/quick-start/online-with-the-online-compiler.html#importing-the-code).)
+- `TODO`: This notation is used to indicate parts of the code that are not yet implemented or need to be completed. If you see a `TODO` comment, it means that the code is still a work in progress.
 
-## Mbed OS build tools
+Example:
+```cpp
+// TODO: Implement the function to calculate the sum of two numbers
+int sum(int a, int b) {
+    return 0; // This is a placeholder. The function needs to be implemented.
+}
+```
+- `FIXME`: This notation is used to mark parts of the code that have known issues or bugs that need to be fixed. If you see a FIXME comment, it means that the code has a problem that needs to be resolved.
+```cpp
+// FIXME: This function sometimes returns incorrect results
+int multiply(int a, int b) {
+    return a * b;
+}
+```
 
-### Mbed CLI 2
-Starting with version 6.5, Mbed OS uses Mbed CLI 2. It uses Ninja as a build system, and CMake to generate the build environment and manage the build process in a compiler-independent manner. If you are working with Mbed OS version prior to 6.5 then check the section [Mbed CLI 1](#mbed-cli-1).
-1. [Install Mbed CLI 2](https://os.mbed.com/docs/mbed-os/latest/build-tools/install-or-upgrade.html).
-1. From the command-line, import the example: `mbed-tools import mbed-os-example-blinky`
-1. Change the current directory to where the project was imported.
+Please use this notation in your code for easy navigation. *mvh Albert*
 
-### Mbed CLI 1
-1. [Install Mbed CLI 1](https://os.mbed.com/docs/mbed-os/latest/quick-start/offline-with-mbed-cli.html).
-1. From the command-line, import the example: `mbed import mbed-os-example-blinky`
-1. Change the current directory to where the project was imported.
+## Setting up mbed-os for use with Visual Studio Code
+### Setting up mbed-os with Visual Studio Code using PlatformIO
+1. Install the PlatformIO extension in Visual Studio Code. You can do this by going to the Extensions view (Ctrl+Shift+X), searching for "PlatformIO", and clicking Install.
 
-## Application functionality
+2. Create a new PlatformIO project. Click on the PlatformIO icon in the Activity Bar, then click on "New Project". In the "Board" field, type the name of your mbed board (for example, "DISCO-L475VG-IOT01A"). In the "Framework" field, select "mbed". Then click "Finish".
 
-The `main()` function is the single thread in the application. It toggles the state of a digital output connected to an LED on the board.
+3. PlatformIO will create a new project with a basic mbed-os setup. You can replace the code in `src/main.cpp` with your own code.
 
-**Note**: This example requires a target with RTOS support, i.e. one with `rtos` declared in `supported_application_profiles` in `targets/targets.json` in [mbed-os](https://github.com/ARMmbed/mbed-os). For non-RTOS targets (usually with small memory sizes), please use [mbed-os-example-blinky-baremetal](https://github.com/ARMmbed/mbed-os-example-blinky-baremetal) instead.
+4. To build the project, click on the checkmark icon in the PlatformIO toolbar. To upload the code to your board, click on the right arrow icon.
 
-## Building and running
+5. You can also use the PlatformIO: Build and PlatformIO: Upload commands in the Command Palette (Ctrl+Shift+P).
 
-1. Connect a USB cable between the USB port on the board and the host computer.
-1. Run the following command to build the example project and program the microcontroller flash memory:
+6. To add additional libraries to your project, you can use the `lib_deps` option in the `platformio.ini` file. For example, to add the DFRobot_RGBLCD1602 library, you would add the following line:
 
-    * Mbed CLI 2
+```ini
+lib_deps = DFRobot_RGBLCD1602
+```
 
-    ```bash
-    $ mbed-tools compile -m <TARGET> -t <TOOLCHAIN> --flash
-    ```
+7. PlatformIO will automatically download and install the libraries when you build your project.
+Remember to include the mbed.h header file in your sourcecodes
 
-    * Mbed CLI 1
-
-    ```bash
-    $ mbed compile -m <TARGET> -t <TOOLCHAIN> --flash
-    ```
-
-Your PC may take a few minutes to compile your code.
-
-The binary is located at:
-* **Mbed CLI 2** - `./cmake_build/<TARGET>/develop/<TOOLCHAIN>/mbed-os-example-blinky.bin`
-* **Mbed CLI 1** - `./BUILD/<TARGET>/<TOOLCHAIN>/mbed-os-example-blinky.bin`
-
-Alternatively, you can manually copy the binary to the board, which you mount on the host computer over USB.
-
-## Expected output
-The LED on your target turns on and off every 500 milliseconds.
-
-
-## Troubleshooting
-If you have problems, you can review the [documentation](https://os.mbed.com/docs/latest/tutorials/debugging.html) for suggestions on what could be wrong and how to fix it.
-
-## Related Links
-
-* [Mbed OS Stats API](https://os.mbed.com/docs/latest/apis/mbed-statistics.html).
-* [Mbed OS Configuration](https://os.mbed.com/docs/latest/reference/configuration.html).
-* [Mbed OS Serial Communication](https://os.mbed.com/docs/latest/tutorials/serial-communication.html).
-* [Mbed OS bare metal](https://os.mbed.com/docs/mbed-os/latest/reference/mbed-os-bare-metal.html).
-* [Mbed boards](https://os.mbed.com/platforms/).
-
-### License and contributions
-
-The software is provided under Apache-2.0 license. Contributions to this project are accepted under the same license. Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for more info.
-
-This project contains code from other projects. The original license text is included in those source files. They must comply with our license guide.
+```cpp
+#include "mbed.h"
+```
