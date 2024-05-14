@@ -16,7 +16,6 @@ AlarmScreen::AlarmScreen() : stateOfSettingAlarm(SettingAlarmState::SET_ALARM_HO
     alarmActive = false;
     alarmTime.tm_hour = 8;
     alarmTime.tm_min = 0;
-    stateOfSettingAlarm = SET_ALARM_HOUR1;
 };
 
 void AlarmScreen::setAlarmTime() {

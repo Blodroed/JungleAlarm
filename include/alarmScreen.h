@@ -36,7 +36,7 @@ public:
     void snoozeAlarm();
     void alarmTrigger();
 
-    void setAlarmTime(const int hour, const int minutes);
+    void setAlarmTime();
 
     void threadStart();
 
@@ -63,9 +63,7 @@ private:
     bool isAlarmSet;
 
     //alarm time as struct
-    struct tm alarmTime
-
-    settingAlarmState stateOfSettingAlarm;
+    struct tm alarmTime;
 };
 
 
