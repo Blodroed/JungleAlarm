@@ -35,6 +35,11 @@ public:
     void enableAlarm();
 
     void setAlarmTime(const int hour, const int minutes);
+
+    void threadStart();
+
+    //The thread managing the alarm and shit
+    Thread alarmThread;
     
 private:
     bool alarmOn;

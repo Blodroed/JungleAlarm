@@ -42,6 +42,8 @@ void AlarmScreen::checkAlarmTime() {
     } else if (alarmTime.tm_min >= 50) {
         muteTime->tm_hour = alarmTime.tm_hour + 1;
         muteTime->tm_min = alarmTime.tm_min - 50;
+    } else  {
+        muteTime->tm_min = alarmTime.tm_min + 10;
     }
 
     // if alarm is snoozed we should add 5 minutes to the alarm time
@@ -127,4 +129,8 @@ void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     lcd.printf("ALARM");
 
     ThisThread::sleep_for(200ms);
+}
+
+void AlarmScreen::threadStart() {
+    alarmThread.start(callback(this, &AlarmScreen::checkAlarmTime));
 }
