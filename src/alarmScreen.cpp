@@ -37,6 +37,11 @@ void AlarmScreen::checkAlarmTime() {
 
     // set mute time to be equal to the alarm time + 10 minutes with some edge cases
     if (alarmTime.tm_hour == 23 && alarmTime.tm_min >= 50) {
+        if (muteTime->tm_yday == 365) {
+            muteTime->tm_yday = 0;
+        } else {
+            muteTime->tm_yday = muteTime->tm_yday + 1;
+        }
         muteTime->tm_hour = 0;
         muteTime->tm_min = alarmTime.tm_min - 50;
     } else if (alarmTime.tm_min >= 50) {
