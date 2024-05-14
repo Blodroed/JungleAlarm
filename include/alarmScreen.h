@@ -22,12 +22,26 @@ public:
     // Constructor
     AlarmScreen();
 
-    void setAlarmTime();
+    // check alarmtime to rtctime
+    void checkAlarmTime();
+
+    // alarmdisplay functions
     void displaySetAlarmScreen(DFRobot_RGBLCD1602 &lcd);
     void displayAlarmScreen(DFRobot_RGBLCD1602 &lcd);
 
     // control functions for alarm
     void muteAlarm();
+    void disableAlarm();
+    void enableAlarm();
+    void snoozeAlarm();
+    void alarmTrigger();
+
+    void setAlarmTime(const int hour, const int minutes);
+
+    void threadStart();
+
+    //The thread managing the alarm and shit
+    Thread alarmThread;
 
     SettingAlarmState changeTimeState();
 
@@ -43,13 +57,15 @@ public:
 
 private:
     bool alarmOn;
+    int alarmSnoozed;
+    bool alarmMuted;
     bool alarmActive;
+    bool isAlarmSet;
 
-    
+    //alarm time as struct
+    struct tm alarmTime
 
- 
-
-
+    settingAlarmState stateOfSettingAlarm;
 };
 
 
