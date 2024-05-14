@@ -188,11 +188,14 @@ void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
 
     // Display the alarm screen
     lcd.setCursor(0, 1);
-    lcd.printf("ALARM");
-
+    if (!isAlarmSet) {
+    lcd.printf("ALARM NOT SET");
+    }
+    
     ThisThread::sleep_for(200ms);
 }
 
 void AlarmScreen::threadStart() {
     alarmThread.start(callback(this, &AlarmScreen::checkAlarmTime));
 }
+
