@@ -115,6 +115,7 @@ void AlarmScreen::displaySetAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
 void AlarmScreen::muteAlarm() {
     // Mute the alarm
     // here we should update the bool alarmActive to false and stop the alarm thread
+    alarmSnoozed = 0;
 }
 
 void AlarmScreen::disableAlarm() {
@@ -130,6 +131,10 @@ void AlarmScreen::enableAlarm() {
 void AlarmScreen::snoozeAlarm() {
     // Snooze the alarm
     // here we should update the bool alarmSnoozed to true and add 5 minutes to the alarm time
+    if (alarmActive) {
+        alarmSnoozed++;
+        alarmActive = false; // this should also stop the buzzer alarm
+    }
 }
 
 void AlarmScreen::alarmTrigger() {
