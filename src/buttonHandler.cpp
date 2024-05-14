@@ -41,6 +41,7 @@ void ButtonHandler::handleMiddleButton() {
             changeTimeState();
             if(alarmScreen.stateOfSettingAlarm == SettingAlarmState::ACCEPT) {
                 alarmScreen.convertAlarmTimeToStruct();
+                alarmScreen.enableAlarm();
                 alarmScreen.stateOfSettingAlarm = SettingAlarmState::SET_ALARM_HOUR1;
                 currentSubState = SubScreenState::NO_STATE;
             }

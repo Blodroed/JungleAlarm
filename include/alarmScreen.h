@@ -47,8 +47,8 @@ public:
     //The thread managing the alarm and shit
     Thread alarmThread;
 
+    // variables for setAlarmscreen states
     SettingAlarmState changeTimeState();
-
     SettingAlarmState stateOfSettingAlarm;
 
     // variables for setting alarm
