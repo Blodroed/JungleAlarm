@@ -10,7 +10,7 @@
 
 // Constructor
 AlarmScreen::AlarmScreen() : stateOfSettingAlarm(SettingAlarmState::SET_ALARM_HOUR1){
-    alarmOn = false;
+    alarmEnabled = false;
     alarmSnoozed = 0;
     alarmMuted = false;
     alarmActive = false;
@@ -184,21 +184,21 @@ void AlarmScreen::muteAlarm() {
 
 void AlarmScreen::disableAlarm() {
     // Disable the alarm
-    // here we should update the bool alarmOn to false and stop the alarm thread
-    alarmOn = false;
+    // here we should update the bool alarmEnabled to false and stop the alarm thread
+    alarmEnabled = false;
     alarmActive = false;
 }
 
 void AlarmScreen::enableAlarm() {
     // Enable the alarm
-    // here we should update the bool alarmOn to true and start the alarm thread
-    alarmOn = true;
+    // here we should update the bool alarmEnabled to true and start the alarm thread
+    alarmEnabled = true;
 }
 
 void AlarmScreen::alarmSwitch() {
     // Switch the alarm on/off
-    // here we should update the bool alarmOn to the opposite of what it is
-    if (alarmOn) {
+    // here we should update the bool alarmEnabled to the opposite of what it is
+    if (alarmEnabled) {
         disableAlarm();
     } else {
         enableAlarm();
@@ -273,13 +273,13 @@ void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     if (!isAlarmSet) {
         lcd.printf("ALARM NOT SET");
     } else if (isAlarmSet && alarmSnoozed >= 1) {
-        lcd.printf("Alarm (s) %d%d:%d%d", setHour1, setHour2, setMin1, setMin2);
-    } else if (isAlarmSet && alarmOn) {
-        lcd.printf("Alarm    %d%d:%d%d", setHour1, setHour2, setMin1, setMin2);
+        lcd.printf("Alarm (s)  %d%d:%d%d", setHour1, setHour2, setMin1, setMin2);
+    } else if (isAlarmSet && alarmEnabled) {
+        lcd.printf("Alarm      %d%d:%d%d", setHour1, setHour2, setMin1, setMin2);
     } else if (isAlarmSet && alarmActive) {
-        lcd.printf("ALARM (a) %d%d:%d%d", setHour1, setHour2, setMin1, setMin2);
-    } else if (!alarmOn) {
-        lcd.printf("Alarm off %d%d:%d%d", setHour1, setHour2, setMin1, setMin2);
+        lcd.printf("ALARM (a)  %d%d:%d%d", setHour1, setHour2, setMin1, setMin2);
+    } else if (!alarmEnabled) {
+        lcd.printf("----------------");
     }
     
     ThisThread::sleep_for(200ms);
