@@ -18,7 +18,7 @@ AlarmScreen::AlarmScreen() : stateOfSettingAlarm(SettingAlarmState::SET_ALARM_HO
     alarmTime.tm_min = 0;
 };
 
-void AlarmScreen::setAlarmTime() {
+void AlarmScreen::setAlarmTimeMore() {
     // Set the alarm time
     switch (stateOfSettingAlarm) {
         case SettingAlarmState::SET_ALARM_HOUR1: 
@@ -40,6 +40,55 @@ void AlarmScreen::setAlarmTime() {
         default:
             break;
     }
+}
+
+void AlarmScreen::setAlarmTimeLess() {
+    // decrement all alarm time values
+    switch (stateOfSettingAlarm) {
+        case SettingAlarmState::SET_ALARM_HOUR1:
+            setHour1 = (setHour1 - 1) % 3;
+            if (setHour1 < 0) {    // modulo works differently in C++ than in math
+                setHour1 = 2;
+            }
+            break;
+        case SettingAlarmState::SET_ALARM_HOUR2:
+            if (setHour1 == 2) {
+                setHour2 = (setHour2 - 1) % 5;
+                if (setHour2 < 0) {
+                    setHour2 = 4;
+                }
+                break;
+            }
+            setHour2 = (setHour2 - 1) % 10;
+            if (setHour2 < 0) {
+                setHour2 = 9;
+            }
+            break;
+        case SettingAlarmState::SET_ALARM_MINUTE1:
+            setMin1 = (setMin1 - 1) % 6;
+            if (setMin1 < 0) {
+                setMin1 = 5;
+            }
+            break;
+        case SettingAlarmState::SET_ALARM_MINUTE2:
+            setMin2 = (setMin2 - 1) % 10;
+            if (setMin2 < 0) {
+                setMin2 = 9;
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+void AlarmScreen::convertAlarmTimeToStruct() {
+    // is only called when the user has accepted the alarm time in buttonHandler
+    if (setHour1 == 2 && setHour2 > 3) {    // edge case for 24 hour clock
+        setHour1 = 0;
+        setHour2 = 0;
+    }
+    alarmTime.tm_hour = setHour1*10 + setHour2;
+    alarmTime.tm_min = setMin1*10 + setMin2;
 }
 
 void AlarmScreen::checkAlarmTime() {
@@ -124,12 +173,6 @@ void AlarmScreen::displaySetAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     char message[] = " + | accept | - ";
     lcd.printf(message);
     ThisThread::sleep_for(300ms);
-    /*
-    for (int i = 0; i < strlen(message)-15; i++) {
-        lcd.scrollDisplayLeft();
-        ThisThread::sleep_for(300ms);
-    }
-    */
 }
 
 void AlarmScreen::muteAlarm() {
@@ -214,7 +257,11 @@ void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     // Display the alarm screen
     lcd.setCursor(0, 1);
     if (!isAlarmSet) {
-    lcd.printf("ALARM NOT SET");
+        lcd.printf("ALARM NOT SET");
+    } else if (isAlarmSet && alarmSnoozed >= 1) {
+        lcd.printf("Alarm (s) %d:%d", alarmTime.tm_hour, alarmTime.tm_min);
+    } else if (isAlarmSet && alarmMuted) {
+
     }
     
     ThisThread::sleep_for(200ms);

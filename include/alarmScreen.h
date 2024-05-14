@@ -36,7 +36,10 @@ public:
     void snoozeAlarm();
     void alarmTrigger();
 
-    void setAlarmTime();
+    // set alarm time and converting it to a struct
+    void setAlarmTimeMore();
+    void setAlarmTimeLess();
+    void convertAlarmTimeToStruct();
 
     void threadStart();
 
@@ -47,9 +50,7 @@ public:
 
     SettingAlarmState stateOfSettingAlarm;
 
-    int alarmHour;
-    int alarmMinute;
-    
+    // variables for setting alarm
     int setHour1 = 0;
     int setHour2 = 0;
     int setMin1 = 0;
@@ -61,6 +62,7 @@ private:
     bool alarmMuted;
     bool alarmActive;
     bool isAlarmSet;
+    bool alarmDisabled;
 
     //alarm time as struct
     struct tm alarmTime;
