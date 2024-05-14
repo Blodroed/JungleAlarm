@@ -6,9 +6,10 @@
 #include "../libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
 
 #include <ctime>
+#include <iterator>
 
 // Constructor
-AlarmScreen::AlarmScreen(){
+AlarmScreen::AlarmScreen() : stateOfSettingAlarm(SettingAlarmState::SET_ALARM_HOUR1){
     alarmOn = false;
     alarmSnoozed = 0;
     alarmMuted = false;
@@ -18,10 +19,28 @@ AlarmScreen::AlarmScreen(){
     stateOfSettingAlarm = SET_ALARM_HOUR1;
 };
 
-void AlarmScreen::setAlarmTime(const int hour, const int minutes) {
+void AlarmScreen::setAlarmTime() {
     // Set the alarm time
-    alarmTime.tm_hour = hour;
-    alarmTime.tm_min = minutes;
+    switch (stateOfSettingAlarm) {
+        case SettingAlarmState::SET_ALARM_HOUR1: 
+            setHour1 = (setHour1+1)%3;
+            break;
+        case SettingAlarmState::SET_ALARM_HOUR2: 
+            if(setHour1==2) {
+                setHour2 = (setHour2+1)%5;
+                break;
+            }
+            setHour2 = (setHour2+1)%10;
+            break;
+        case SettingAlarmState::SET_ALARM_MINUTE1: 
+            setMin1 = (setMin1+1)%6;
+            break;
+        case SettingAlarmState::SET_ALARM_MINUTE2:
+            setMin2 = (setMin2+1)%10;
+            break;
+        default:
+            break;
+    }
 }
 
 void AlarmScreen::checkAlarmTime() {
@@ -100,16 +119,18 @@ void AlarmScreen::displaySetAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     lcd.display();
     lcd.clear();
     lcd.setCursor(0, 0);  // Set cursor to line 1 (top line)
-    lcd.printf("Set Alarm Time");
+    lcd.printf("Time: %d%d:%d%d",setHour1,setHour2,setMin1,setMin2);
     lcd.setCursor(0, 1);
     
-    char message[] = "Right button: add, left button: remove";
+    char message[] = " + | accept | - ";
     lcd.printf(message);
-    ThisThread::sleep_for(1000ms);
+    ThisThread::sleep_for(300ms);
+    /*
     for (int i = 0; i < strlen(message)-15; i++) {
         lcd.scrollDisplayLeft();
         ThisThread::sleep_for(300ms);
     }
+    */
 }
 
 void AlarmScreen::muteAlarm() {
@@ -198,6 +219,15 @@ void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     }
     
     ThisThread::sleep_for(200ms);
+}
+
+SettingAlarmState AlarmScreen::changeTimeState() {
+    int nextTimeState = static_cast<int>(stateOfSettingAlarm) + 1;
+    if(nextTimeState>5) {
+        nextTimeState = 5;
+    }
+    stateOfSettingAlarm = static_cast<SettingAlarmState>(nextTimeState);
+    return stateOfSettingAlarm;
 }
 
 void AlarmScreen::threadStart() {

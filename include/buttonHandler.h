@@ -44,15 +44,19 @@ public:
     void changeStateRight();
     void changeSubState();
 
+    void changeTimeState();
+
     // getters
     ScreenState getCurrentState() { return currentState; }
     SubScreenState getCurrentSubState() { return currentSubState; }
 
-    //Public debounce timer. Used in main simply to initialize the timer.
-
 private:
     ScreenState currentState;
     SubScreenState currentSubState;
+    SettingAlarmState currentTimeState;
+    //which digit in the time setting screen the user is changing (hour1, hour2, min1, min2)
+    //SettingAlarmState currentSettingAlarmState;
+
     AlarmScreen &alarmScreen;
     //WeatherScreen &weatherScreen;
     //TempHumidityScreen &tempHumidityScreen;
