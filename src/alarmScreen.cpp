@@ -10,7 +10,7 @@
 // Constructor
 AlarmScreen::AlarmScreen(){
     alarmOn = false;
-    alarmSnoozed = false;
+    alarmSnoozed = 0;
     alarmMuted = false;
     alarmActive = false;
     alarmTime.tm_hour = 8;
@@ -53,10 +53,15 @@ void AlarmScreen::checkAlarmTime() {
 
     // if alarm is snoozed we should add 5 minutes to the alarm time
     struct tm* adjustedMutetime = muteTime;
-    if (alarmSnoozed) {
+    if (alarmSnoozed >= 1) {
         snoozeMinutes = 5;
         if (muteTime->tm_min + snoozeMinutes >= 60) {       // edge casing if the snooze time is more than 60 minutes
             if (muteTime->tm_hour == 23) {
+                if (adjustedMutetime->tm_yday == 365) {
+                    adjustedMutetime->tm_yday = 0;
+                } else {
+                    adjustedMutetime->tm_yday = muteTime->tm_yday + 1;
+                }
                 adjustedMutetime->tm_hour = 0;
             } else {
                 adjustedMutetime->tm_hour = muteTime->tm_hour + 1;

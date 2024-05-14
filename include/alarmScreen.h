@@ -45,7 +45,7 @@ public:
     
 private:
     bool alarmOn;
-    bool alarmSnoozed;
+    int alarmSnoozed;
     bool alarmMuted;
     bool alarmActive;
     bool isAlarmSet;
