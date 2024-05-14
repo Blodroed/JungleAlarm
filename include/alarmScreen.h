@@ -33,6 +33,7 @@ public:
     void muteAlarm();
     void disableAlarm();
     void enableAlarm();
+    void alarmSwitch();  // enable or disable alarm with a button
     void snoozeAlarm();
     void alarmTrigger();
 
@@ -57,12 +58,11 @@ public:
     int setMin2 = 0;
 
 private:
-    bool alarmOn;
-    int alarmSnoozed;
-    bool alarmMuted;
-    bool alarmActive;
-    bool isAlarmSet;
-    bool alarmDisabled;
+    bool alarmOn;       // enabled or Disabled alarm
+    int alarmSnoozed;   // incremented snooze timer
+    bool alarmMuted;    // muted or not
+    bool alarmActive;   // if the alarm is ringing
+    bool isAlarmSet;    // if the alarm time is set
 
     //alarm time as struct
     struct tm alarmTime;

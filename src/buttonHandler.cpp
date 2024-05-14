@@ -78,7 +78,12 @@ void ButtonHandler::handleSpecialButton() {
         return;
     }
     switch(currentSubState) {
-        case SubScreenState::SET_ALARM_SCREEN: changeSubState(); break;
+        case SubScreenState::SET_ALARM_SCREEN:
+            alarmScreen.alarmSwitch();
+            alarmScreen.convertAlarmTimeToStruct();
+            alarmScreen.stateOfSettingAlarm = SettingAlarmState::SET_ALARM_HOUR1;
+            currentSubState = SubScreenState::NO_STATE;
+            break;
         case SubScreenState::SET_IP_ADDRESS: break;
         default: break;
     }

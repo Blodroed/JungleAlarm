@@ -89,6 +89,7 @@ void AlarmScreen::convertAlarmTimeToStruct() {
     }
     alarmTime.tm_hour = setHour1*10 + setHour2;
     alarmTime.tm_min = setMin1*10 + setMin2;
+    isAlarmSet = true;
 }
 
 void AlarmScreen::checkAlarmTime() {
@@ -184,11 +185,24 @@ void AlarmScreen::muteAlarm() {
 void AlarmScreen::disableAlarm() {
     // Disable the alarm
     // here we should update the bool alarmOn to false and stop the alarm thread
+    alarmOn = false;
+    alarmActive = false;
 }
 
 void AlarmScreen::enableAlarm() {
     // Enable the alarm
     // here we should update the bool alarmOn to true and start the alarm thread
+    alarmOn = true;
+}
+
+void AlarmScreen::alarmSwitch() {
+    // Switch the alarm on/off
+    // here we should update the bool alarmOn to the opposite of what it is
+    if (alarmOn) {
+        disableAlarm();
+    } else {
+        enableAlarm();
+    }
 }
 
 void AlarmScreen::snoozeAlarm() {
@@ -259,9 +273,13 @@ void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     if (!isAlarmSet) {
         lcd.printf("ALARM NOT SET");
     } else if (isAlarmSet && alarmSnoozed >= 1) {
-        lcd.printf("Alarm (s) %d:%d", alarmTime.tm_hour, alarmTime.tm_min);
-    } else if (isAlarmSet && alarmMuted) {
-
+        lcd.printf("Alarm (s) %d%d:%d%d", setHour1, setHour2, setMin1, setMin2);
+    } else if (isAlarmSet && alarmOn) {
+        lcd.printf("Alarm    %d%d:%d%d", setHour1, setHour2, setMin1, setMin2);
+    } else if (isAlarmSet && alarmActive) {
+        lcd.printf("ALARM (a) %d%d:%d%d", setHour1, setHour2, setMin1, setMin2);
+    } else if (!alarmOn) {
+        lcd.printf("Alarm off %d%d:%d%d", setHour1, setHour2, setMin1, setMin2);
     }
     
     ThisThread::sleep_for(200ms);
