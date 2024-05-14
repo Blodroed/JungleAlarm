@@ -20,7 +20,7 @@ enum class SettingAlarmState {
 class AlarmScreen {
 public:
     // Constructor
-    AlarmScreen();
+    AlarmScreen(PwmOut &buzzer);
 
     // check alarmtime to rtctime
     void checkAlarmTime();
@@ -46,6 +46,7 @@ public:
 
     //The thread managing the alarm and shit
     Thread alarmThread;
+    Thread buzzerRinging;
 
     // variables for setAlarmscreen states
     SettingAlarmState changeTimeState();
@@ -63,6 +64,8 @@ private:
     bool alarmMuted;    // muted or not
     bool alarmActive;   // if the alarm is ringing
     bool isAlarmSet;    // if the alarm time is set
+
+    PwmOut &alarmBuzzer;
 
     //alarm time as struct
     struct tm alarmTime;

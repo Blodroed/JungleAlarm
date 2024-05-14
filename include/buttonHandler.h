@@ -43,6 +43,7 @@ public:
     void changeStateLeft();
     void changeStateRight();
     void changeSubState();
+    static void changeToAlarmScreen();
 
     void changeTimeState();
 
@@ -53,8 +54,7 @@ public:
 private:
     ScreenState currentState;
     SubScreenState currentSubState;
-    SettingAlarmState currentTimeState;
-    //which digit in the time setting screen the user is changing (hour1, hour2, min1, min2)
+    SettingAlarmState currentTimeState; // the time digit in the time setting screen the user is changing (hour1, hour2, min1, min2)
     //SettingAlarmState currentSettingAlarmState;
 
     AlarmScreen &alarmScreen;

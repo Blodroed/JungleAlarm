@@ -57,7 +57,7 @@ int main()
     time_t unixtime = time(NULL);
 
     // Define the alarm screen object
-    AlarmScreen alarmScreen;
+    AlarmScreen alarmScreen(alarmBuzzer);
     ScreenHandler screenHandler(0,3,0,2);
 
     //Button handler object

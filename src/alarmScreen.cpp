@@ -4,12 +4,13 @@
 
 #include "../include/alarmScreen.h"
 #include "../libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
+#include "../include/buttonHandler.h"
 
 #include <ctime>
 #include <iterator>
 
 // Constructor
-AlarmScreen::AlarmScreen() : stateOfSettingAlarm(SettingAlarmState::SET_ALARM_HOUR1){
+AlarmScreen::AlarmScreen(PwmOut &buzzer) : alarmBuzzer(buzzer), stateOfSettingAlarm(SettingAlarmState::SET_ALARM_HOUR1){
     alarmEnabled = false;
     alarmSnoozed = 0;
     alarmMuted = false;
@@ -147,10 +148,18 @@ void AlarmScreen::checkAlarmTime() {
     // alarmTime.tm_min <= now->tm_min <= adjustedMutetime->tm_min
     if (alarmTime.tm_hour <= now->tm_hour && now->tm_hour <= adjustedMutetime->tm_hour) {
         if (alarmTime.tm_min <= now->tm_min && now->tm_min <= adjustedMutetime->tm_min) {
+            if (!alarmActive) {
+                alarmTrigger();
+                alarmMuted = false;
+            }
             alarmActive = true;
+        }  else if (alarmMuted){
+            alarmActive = false;
+            alarmMuted = false;
         }
-    } else {
+    } else if (alarmMuted) {
         alarmActive = false;
+        alarmMuted = false;
     }
     ThisThread::sleep_for(1000ms);
 }
@@ -180,6 +189,10 @@ void AlarmScreen::muteAlarm() {
     // Mute the alarm
     // here we should update the bool alarmActive to false and stop the alarm thread
     alarmSnoozed = 0;
+    alarmMuted = true;
+
+    // turn off the buzzer
+    alarmBuzzer = 0.0;
 }
 
 void AlarmScreen::disableAlarm() {
@@ -220,37 +233,15 @@ void AlarmScreen::alarmTrigger() {
     // Trigger the alarm
     // here we should start the alarm thread and play the alarm sound
 
-    // ==== ChatGPT thread Start suggestion ====
-    /*
-     * // Define a boolean variable to keep track of whether the alarm is set
-     * bool isAlarmSet = false;
-     * 
-     * // Define the alarm check thread
-     * Thread alarmCheckThread;
+    // set the alarm to active
+    alarmActive = true;
 
-     * while (true) {
-     *     switch (buttonHandler.getCurrentState()) {
-     *     case ScreenState::ALARM_SCREEN_VIEW: {
-     *         // screen
-     *         if(buttonHandler.getCurrentSubState() == SubScreenState::NO_STATE) {
-     *             alarmScreen.displayAlarmScreen(lcd);
-     *         } else if(buttonHandler.getCurrentSubState() == SubScreenState::SET_ALARM_SCREEN) {
-     *             alarmScreen.displaySetAlarmScreen(lcd);
-     * 
-     *             // Set the alarm
-     *             isAlarmSet = true;
-     * 
-     *             // Create the alarm check thread if it's not already running
-     *             if (!alarmCheckThread.get_state()) {
-     *                 alarmCheckThread.start(callback(&alarmCheckFunction));
-     *             }
-     *         }
-     *  
-     *         break;
-     *     }
-     *     // Rest of your code...
-     * }
-     */
+    // sound the buzzer
+    alarmBuzzer.period(1.0/440.0);
+    alarmBuzzer = 0.5;
+
+    // change the screen to the alarm screen
+    ButtonHandler::changeToAlarmScreen();
 }
 
 void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
@@ -279,7 +270,7 @@ void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     } else if (isAlarmSet && alarmEnabled) {
         lcd.printf("Alarm      %d%d:%d%d", setHour1, setHour2, setMin1, setMin2);
     } else if (isAlarmSet && alarmActive) {
-        lcd.printf("ALARM (a)  %d%d:%d%d", setHour1, setHour2, setMin1, setMin2);
+        lcd.printf("ALARM (A)  %d%d:%d%d", setHour1, setHour2, setMin1, setMin2);
     } else if (!alarmEnabled) {
         lcd.printf("----------------");
     }

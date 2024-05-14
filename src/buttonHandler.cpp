@@ -1,12 +1,5 @@
 #include "buttonHandler.h"
-#include <cctype>
-#include <chrono>
-#include <cstdio>
-#include <exception>
-#include <ratio>
-#include <string>
 
-BufferedSerial pc1(USBTX, USBRX);
 
 void ButtonHandler::handleLeftButton() {
     switch(currentSubState) {
@@ -82,6 +75,7 @@ void ButtonHandler::handleSpecialButton() {
         case SubScreenState::SET_ALARM_SCREEN:
             alarmScreen.alarmSwitch();
             alarmScreen.convertAlarmTimeToStruct();
+
             alarmScreen.stateOfSettingAlarm = SettingAlarmState::SET_ALARM_HOUR1;
             currentSubState = SubScreenState::NO_STATE;
             break;
@@ -117,4 +111,9 @@ void ButtonHandler::changeSubState() {
 
 void ButtonHandler::changeTimeState() {
     currentTimeState = alarmScreen.changeTimeState();
+}
+
+void ButtonHandler::changeToAlarmScreen() {
+    currentState = ScreenState::ALARM_SCREEN_VIEW;
+    currentSubState = SubScreenState::NO_STATE;
 }

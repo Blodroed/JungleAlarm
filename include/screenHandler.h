@@ -15,6 +15,7 @@ public:
 
     // change subscreen
     void changeSubScreen();
+    void changeToAlarmScreen();
 
     // getters
     int getCurrentSubScreenNumber();
