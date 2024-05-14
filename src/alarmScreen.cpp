@@ -187,12 +187,14 @@ void AlarmScreen::disableAlarm() {
     // here we should update the bool alarmEnabled to false and stop the alarm thread
     alarmEnabled = false;
     alarmActive = false;
+    alarmThread.terminate();
 }
 
 void AlarmScreen::enableAlarm() {
     // Enable the alarm
     // here we should update the bool alarmEnabled to true and start the alarm thread
     alarmEnabled = true;
+    alarmThread.start(callback(this, &AlarmScreen::checkAlarmTime));
 }
 
 void AlarmScreen::alarmSwitch() {
