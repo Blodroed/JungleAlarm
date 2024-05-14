@@ -9,44 +9,63 @@
 
 #include <ctime>
 
-class AlarmScreen {
-public:
-    enum alarmState {
-        ALARM_MENU,
-        SET_ALARM
-    };
-
-    enum settingAlarmState {
+enum class SettingAlarmState {
         SET_ALARM_HOUR1,
         SET_ALARM_HOUR2,
         SET_ALARM_MINUTE1,
         SET_ALARM_MINUTE2,
         ACCEPT
-    };
+};
 
+class AlarmScreen {
+public:
     // Constructor
-    AlarmScreen(void (*changeScreenLeft)(int screenNumber, int maxScreenNumber), void (*changeScreenRight)(int screenNumber, int maxScreenNumber));
+    AlarmScreen();
 
-    void setAlarmTime();
-    void setAlarmScreen();
+    // check alarmtime to rtctime
+    void checkAlarmTime();
+
+    // alarmdisplay functions
+    void displaySetAlarmScreen(DFRobot_RGBLCD1602 &lcd);
     void displayAlarmScreen(DFRobot_RGBLCD1602 &lcd);
 
-    // button handling
-    void leftButtonPressed();
-    void middleButtonPressed();
-    void rightButtonPressed();
-    void specialButtonPressed();
-    
+    // control functions for alarm
+    void muteAlarm();
+    void disableAlarm();
+    void enableAlarm();
+    void alarmSwitch();  // enable or disable alarm with a button
+    void snoozeAlarm();
+    void alarmTrigger();
+
+    // set alarm time and converting it to a struct
+    void setAlarmTimeMore();
+    void setAlarmTimeLess();
+    void convertAlarmTimeToStruct();
+
+    void threadStart();
+
+    //The thread managing the alarm and shit
+    Thread alarmThread;
+
+    // variables for setAlarmscreen states
+    SettingAlarmState changeTimeState();
+    SettingAlarmState stateOfSettingAlarm;
+
+    // variables for setting alarm
+    int setHour1 = 0;
+    int setHour2 = 0;
+    int setMin1 = 0;
+    int setMin2 = 0;
 
 private:
-    bool alarmOn;
-    bool alarmActive;
+    bool alarmEnabled;       // enabled or Disabled alarm
+    int alarmSnoozed;   // incremented snooze timer
+    bool alarmMuted;    // muted or not
+    bool alarmActive;   // if the alarm is ringing
+    bool isAlarmSet;    // if the alarm time is set
 
-    alarmState stateOfAlarm;
-    settingAlarmState stateOfSettingAlarm;
-
-    void (*changeScreenLeft)(int screenNumber, int maxScreenNumber);
-    void (*changeScreenRight)(int screenNumber, int maxScreenNumber);
+    //alarm time as struct
+    struct tm alarmTime;
 };
 
 

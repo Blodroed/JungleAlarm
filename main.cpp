@@ -7,7 +7,11 @@
 #include "libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
 #include "include/alarmScreen.h"
 
+#include <algorithm>
 #include <ctime>
+#include <exception>
+
+#include "buttonHandler.h"
 
 // alarm buzzer
 PwmOut alarmBuzzer(D5);
@@ -15,6 +19,9 @@ PwmOut alarmBuzzer(D5);
 // Define the LCD object
 I2C lcdI2C(D14, D15);
 DFRobot_RGBLCD1602 lcd(&lcdI2C);
+
+// buffered serial for debugging
+BufferedSerial pc(USBTX, USBRX);
 
 // Define buttons with interrupts
 InterruptIn leftButton(D0, PullUp); 
@@ -40,43 +47,66 @@ void changeScreenRight(int screenNumber, int maxScreenNumber) {
 }
 
 
+
 int main()
 {
-    // Define variables
-    int screenNumber = 0;       // you can change this if you want to start on another screen
-    int maxScreenNumber = 4;    // max screen should probably be a global variable outside of main
-
     // initilization
     lcd.init();
     lcd.setRGB(0, 0, 255);  // Set the LCD background color to blue
-    set_time(1046703600);   // set RTC to the birth of Albert
+    set_time(1046674880);   // set RTC to the birth of Albert
     time_t unixtime = time(NULL);
 
     // Define the alarm screen object
-    AlarmScreen alarmScreen(changeScreenLeft, changeScreenRight);
+    AlarmScreen alarmScreen;
+    ScreenHandler screenHandler(0,3,0,2);
+
+    //Button handler object
+    ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, screenHandler, lcd);
 
     while (true) {
-        switch (screenNumber)
-        {
-        case 0:
-            lcd.clear();
-            
-            // Bind buttons to alarm screen
-            middleButton.fall(callback(&alarmScreen, &AlarmScreen::middleButtonPressed));
-            leftButton.fall(callback(&alarmScreen, &AlarmScreen::leftButtonPressed));
-            rightButton.fall(callback(&alarmScreen, &AlarmScreen::rightButtonPressed));
-            specialButton.fall(callback(&alarmScreen, &AlarmScreen::specialButtonPressed));
-
+        switch (buttonHandler.getCurrentState()) {
+        case ScreenState::ALARM_SCREEN_VIEW: {
             // screen
-            alarmScreen.displayAlarmScreen(lcd);            
-        case 1:
+            if(buttonHandler.getCurrentSubState() == SubScreenState::NO_STATE) {
+                alarmScreen.displayAlarmScreen(lcd);
+            } else if(buttonHandler.getCurrentSubState() == SubScreenState::SET_ALARM_SCREEN) {
+                alarmScreen.displaySetAlarmScreen(lcd);
+            }
+            
+            break;
+        }
+        
+        case ScreenState::TEMP_HUMIDITY_SCREEN: {
             // Bind buttons to news screen
 
             // Test screen hardcoded
             lcd.display();
-            lcd.printf("Halla Balla");
+            lcd.printf("Temphum");
+            ThisThread::sleep_for(100ms);
             lcd.clear();
+            break;
+        }
+        case ScreenState::WEATHER_SCREEN: {
+            // test screen hardcoded
+            lcd.display();
+            lcd.printf("Weather");
+            ThisThread::sleep_for(100ms);
+            lcd.clear();
+            break;
+        }
+        case ScreenState::NEWS_SCREEN: {
+            // test screen hardcoded
+            lcd.display();
+            lcd.printf("News");
+            ThisThread::sleep_for(100ms);
+            lcd.clear();
+            break;
+        }
         default:
+            lcd.display();
+            lcd.printf("Default is being run");
+            ThisThread::sleep_for(100ms);
+            lcd.clear();
             break;
         }
     }
