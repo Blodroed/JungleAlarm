@@ -11,7 +11,8 @@
 #include <ctime>
 #include <exception>
 
-#include "buttonHandler.h"
+#include "include/buttonHandler.h"
+#include "include/tempHum.h"
 
 // alarm buzzer
 PwmOut alarmBuzzer(D5);
