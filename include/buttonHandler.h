@@ -43,7 +43,7 @@ public:
     void changeStateLeft();
     void changeStateRight();
     void changeSubState();
-    static void changeToAlarmScreen();
+    void changeToAlarmScreen();
 
     void changeTimeState();
 

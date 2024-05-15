@@ -241,7 +241,6 @@ void AlarmScreen::alarmTrigger() {
     alarmBuzzer = 0.5;
 
     // change the screen to the alarm screen
-    ButtonHandler::changeToAlarmScreen();
 }
 
 void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
