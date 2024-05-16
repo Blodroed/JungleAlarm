@@ -6,3 +6,5 @@ projectfiles
 /mbed-os/
 /.idea
 /cmake-build-debug
+BUILD
+wifi-ism43362
