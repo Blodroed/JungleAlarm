@@ -4,15 +4,15 @@
  */
 
 #include "mbed.h"
-#include "libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
+#include "DFRobot_RGBLCD1602.h"
 #include "include/alarmScreen.h"
 
 #include <algorithm>
 #include <ctime>
 #include <exception>
 
-#include "include/buttonHandler.h"
-#include "include/tempHum.h"
+#include "buttonHandler.h"
+
 
 // alarm buzzer
 PwmOut alarmBuzzer(D5);
@@ -60,9 +60,10 @@ int main()
     // Define the alarm screen object
     AlarmScreen alarmScreen;
     ScreenHandler screenHandler(0,3,0,2);
-
+    Temphum tempHumScreen;
+    
     //Button handler object
-    ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, screenHandler, lcd);
+    ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, screenHandler, lcd, tempHumScreen);
 
     while (true) {
         switch (buttonHandler.getCurrentState()) {
@@ -73,29 +74,24 @@ int main()
             } else if(buttonHandler.getCurrentSubState() == SubScreenState::SET_ALARM_SCREEN) {
                 alarmScreen.displaySetAlarmScreen(lcd);
             }
-            
             break;
         }
         
         case ScreenState::TEMP_HUMIDITY_SCREEN: {
             // Bind buttons to news screen
-
             // Test screen hardcoded
-            lcd.display();
-            lcd.printf("Temphum");
-            ThisThread::sleep_for(100ms);
-            lcd.clear();
+            tempHumScreen.displayTempHumScreen(lcd);
             break;
         }
         case ScreenState::WEATHER_SCREEN: {
-            // test screen hardcoded
+           // test screen hardcoded
             lcd.display();
             lcd.printf("Weather");
             ThisThread::sleep_for(100ms);
             lcd.clear();
             break;
         }
-        case ScreenState::NEWS_SCREEN: {
+        case ScreenState::NEWS_SCREEN: { 
             // test screen hardcoded
             lcd.display();
             lcd.printf("News");
@@ -103,7 +99,7 @@ int main()
             lcd.clear();
             break;
         }
-        default:
+        default: 
             lcd.display();
             lcd.printf("Default is being run");
             ThisThread::sleep_for(100ms);

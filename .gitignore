@@ -8,3 +8,5 @@ projectfiles
 /cmake-build-debug
 BUILD
 HTS221
+mbed-os
+libs/HTS221

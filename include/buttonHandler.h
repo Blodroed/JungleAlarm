@@ -2,6 +2,7 @@
 #include "libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
 #include "include/alarmScreen.h"
 #include "screenHandler.h"
+#include "tempHum.h"
 #include "../libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
 
 #include <algorithm>
@@ -24,8 +25,8 @@ enum class SubScreenState {
 class ButtonHandler {
 public:
 
-    ButtonHandler(InterruptIn& leftButton_, InterruptIn& middleButton_, InterruptIn& rightButton_, InterruptIn& specialButton_, AlarmScreen &alarmScreen_, ScreenHandler screenHandler_, DFRobot_RGBLCD1602 &lcd_)
-            : leftButton(leftButton_), middleButton(middleButton_), rightButton(rightButton_), specialButton(specialButton_), alarmScreen(alarmScreen_), screenHandler(screenHandler_), currentState(ScreenState::ALARM_SCREEN_VIEW), currentSubState(SubScreenState::NO_STATE), lcd(lcd_) {
+    ButtonHandler(InterruptIn& leftButton_, InterruptIn& middleButton_, InterruptIn& rightButton_, InterruptIn& specialButton_, AlarmScreen &alarmScreen_, ScreenHandler screenHandler_, DFRobot_RGBLCD1602 &lcd_, Temphum &temphumScreen_)
+            : leftButton(leftButton_), middleButton(middleButton_), rightButton(rightButton_), specialButton(specialButton_), alarmScreen(alarmScreen_), screenHandler(screenHandler_), tempHumidityScreen(temphumScreen_), currentState(ScreenState::ALARM_SCREEN_VIEW), currentSubState(SubScreenState::NO_STATE), lcd(lcd_) {
 
         leftButton.rise(callback(this,&ButtonHandler::handleLeftButton));
         middleButton.rise(callback(this,&ButtonHandler::handleMiddleButton));
@@ -59,7 +60,7 @@ private:
 
     AlarmScreen &alarmScreen;
     //WeatherScreen &weatherScreen;
-    //TempHumidityScreen &tempHumidityScreen;
+    Temphum &tempHumidityScreen;
     //NewsScreen &newsScreen;
     ScreenHandler screenHandler;
 

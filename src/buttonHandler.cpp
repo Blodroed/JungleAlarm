@@ -15,7 +15,6 @@ void ButtonHandler::handleLeftButton() {
         case SubScreenState::SET_IP_ADDRESS: break;
         default: break;
     }
-
 }
 
 void ButtonHandler::handleMiddleButton() {
@@ -59,7 +58,6 @@ void ButtonHandler::handleRightButton() {
         case SubScreenState::SET_IP_ADDRESS: break;
         default: break;
     }
-    
 }
 
 void ButtonHandler::handleSpecialButton() {
