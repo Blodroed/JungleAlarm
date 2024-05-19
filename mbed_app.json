@@ -1,0 +1,15 @@
+{
+  "target_overrides": {
+    "*": {
+      "nsapi.default-wifi-security": "WPA_WPA2",
+      "nsapi.default-wifi-ssid": "\"SSID_HERE\"",
+      "nsapi.default-wifi-password": "\"PASSWORD_HERE\"",
+      "rtos.main-thread-stack-size": 8192
+    },
+    "DISCO_L475VG_IOT01A": {
+      "target.components_add": ["ism43362"],
+      "ism43362.provide-default": true,
+      "target.network-default-interface-type": "WIFI"
+    }
+  }
+}
