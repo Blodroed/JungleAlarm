@@ -63,6 +63,9 @@ int main()
     //Button handler object
     ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, screenHandler, lcd);
 
+    // alarmThread
+    Thread alarmcheck;
+
     while (true) {
         switch (buttonHandler.getCurrentState()) {
         case ScreenState::ALARM_SCREEN_VIEW: {

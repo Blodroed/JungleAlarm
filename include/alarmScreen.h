@@ -59,11 +59,11 @@ public:
     int setMin2 = 0;
 
 private:
-    bool alarmEnabled;       // enabled or Disabled alarm
-    int alarmSnoozed;   // incremented snooze timer
-    bool alarmMuted;    // muted or not
-    bool alarmActive;   // if the alarm is ringing
-    bool isAlarmSet;    // if the alarm time is set
+    bool alarmEnabled;      // enabled or Disabled alarm
+    int alarmSnoozed;       // incremented snooze timer
+    bool alarmMuted;        // muted or not
+    bool alarmActive;       // if the alarm is ringing
+    bool isAlarmSet;        // if the alarm time is set
 
     PwmOut &alarmBuzzer;
 
