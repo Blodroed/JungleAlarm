@@ -29,6 +29,9 @@ InterruptIn middleButton(D1, PullUp);
 InterruptIn rightButton(D2, PullUp);
 InterruptIn specialButton(D4, PullUp);
 
+// threads
+Thread alarmThread;
+
 // Change the screen right or left functions
 // This should maybe be added to another class
 void changeScreenLeft(int screenNumber, int maxScreenNumber) {
@@ -52,7 +55,7 @@ int main()
 {
     // initilization
     lcd.init();
-    lcd.setRGB(0, 0, 255);  // Set the LCD background color to blue
+    lcd.setRGB(150, 50, 255);  // Set the LCD background color to blue
     set_time(1046674880);   // set RTC to the birth of Albert
     time_t unixtime = time(NULL);
 
@@ -63,8 +66,8 @@ int main()
     //Button handler object
     ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, screenHandler, lcd);
 
-    // alarmThread
-    Thread alarmcheck;
+    // initilize the alarmThread
+    alarmThread.start(callback(&alarmScreen, &AlarmScreen::checkAlarmTime));
 
     while (true) {
         switch (buttonHandler.getCurrentState()) {

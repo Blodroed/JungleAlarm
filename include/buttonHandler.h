@@ -2,7 +2,7 @@
 #include "libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
 #include "include/alarmScreen.h"
 #include "screenHandler.h"
-#include "../libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
+#include "mbed_events.h"
 
 #include <algorithm>
 #include <ctime>
@@ -46,6 +46,9 @@ public:
     void changeToAlarmScreen();
 
     void changeTimeState();
+
+    // eventqueue for interrupts
+    EventQueue eventQueue;
 
     // getters
     ScreenState getCurrentState() { return currentState; }

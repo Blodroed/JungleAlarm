@@ -42,10 +42,11 @@ public:
     void setAlarmTimeLess();
     void convertAlarmTimeToStruct();
 
-    void threadStart();
+    // mutex locking
+    void lockMutex();
+    void unlockMutex();
 
     //The thread managing the alarm and shit
-    Thread alarmThread;
     Thread buzzerRinging;
 
     // variables for setAlarmscreen states
@@ -69,6 +70,9 @@ private:
 
     //alarm time as struct
     struct tm alarmTime;
+
+    // mutex for mutexexceptions
+    Mutex alarmMutex;
 };
 
 

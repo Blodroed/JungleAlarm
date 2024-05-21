@@ -1,12 +1,20 @@
 #include "buttonHandler.h"
-
+#include "mbed_events.h"
 
 void ButtonHandler::handleLeftButton() {
     switch(currentSubState) {
-        case SubScreenState::NO_STATE: changeStateLeft(); break;
-        case SubScreenState::SET_ALARM_SCREEN: alarmScreen.setAlarmTimeMore(); break;
-        case SubScreenState::SET_IP_ADDRESS: break;
-        default: break;
+        case SubScreenState::NO_STATE:
+            changeStateLeft();
+            break;
+        case SubScreenState::SET_ALARM_SCREEN:
+            eventQueue.call(callback(&alarmScreen, &AlarmScreen::lockMutex));
+            alarmScreen.setAlarmTimeMore();
+            eventQueue.call(callback(&alarmScreen, &AlarmScreen::unlockMutex));
+            break;
+        case SubScreenState::SET_IP_ADDRESS:
+            break;
+        default:
+            break;
     }
 
 }
@@ -31,6 +39,7 @@ void ButtonHandler::handleMiddleButton() {
     }
     switch(currentSubState) {
         case SubScreenState::SET_ALARM_SCREEN: 
+            eventQueue.call(callback(&alarmScreen, &AlarmScreen::lockMutex));
             changeTimeState();
             if(alarmScreen.stateOfSettingAlarm == SettingAlarmState::ACCEPT) {
                 alarmScreen.convertAlarmTimeToStruct();
@@ -38,21 +47,29 @@ void ButtonHandler::handleMiddleButton() {
                 alarmScreen.stateOfSettingAlarm = SettingAlarmState::SET_ALARM_HOUR1;
                 currentSubState = SubScreenState::NO_STATE;
             }
+            eventQueue.call(callback(&alarmScreen, &AlarmScreen::unlockMutex));
             break;
         case SubScreenState::SET_IP_ADDRESS: break;
         default: break;
-    }    
-    
+    }
 }
 
 void ButtonHandler::handleRightButton() {
     switch (currentSubState) {
-        case SubScreenState::NO_STATE: changeStateRight(); break;
-        case SubScreenState::SET_ALARM_SCREEN: alarmScreen.setAlarmTimeLess(); break;
-        case SubScreenState::SET_IP_ADDRESS: break;
-        default: break;
+        case SubScreenState::NO_STATE:
+            changeStateRight();
+            break;
+        case SubScreenState::SET_ALARM_SCREEN:
+            eventQueue.call(callback(&alarmScreen, &AlarmScreen::lockMutex));
+            alarmScreen.setAlarmTimeLess();
+            eventQueue.call(callback(&alarmScreen, &AlarmScreen::unlockMutex));
+            break;
+        case SubScreenState::SET_IP_ADDRESS:
+            break;
+        default:
+            break;
     }
-    
+
 }
 
 void ButtonHandler::handleSpecialButton() {
@@ -73,11 +90,13 @@ void ButtonHandler::handleSpecialButton() {
     }
     switch(currentSubState) {
         case SubScreenState::SET_ALARM_SCREEN:
+            eventQueue.call(callback(&alarmScreen, &AlarmScreen::lockMutex));
             alarmScreen.alarmSwitch();
             alarmScreen.convertAlarmTimeToStruct();
 
             alarmScreen.stateOfSettingAlarm = SettingAlarmState::SET_ALARM_HOUR1;
             currentSubState = SubScreenState::NO_STATE;
+            eventQueue.call(callback(&alarmScreen, &AlarmScreen::unlockMutex));
             break;
         case SubScreenState::SET_IP_ADDRESS: break;
         default: break;
