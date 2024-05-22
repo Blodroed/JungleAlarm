@@ -59,12 +59,9 @@ int main()
     time_t unixtime = time(NULL);
     alarmBuzzer.write(0.0f);
 
-    // screenhandler
-    ScreenHandler screenHandler(0,3,0,2);
-
     //Button handler object
     AlarmScreen alarmScreen(alarmBuzzer);
-    ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, screenHandler, lcd);
+    ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, lcd);
 
     // initilize the alarmThread
     alarmThread.start(callback(&alarmScreen, &AlarmScreen::checkAlarmTime));

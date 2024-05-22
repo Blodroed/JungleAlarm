@@ -136,11 +136,6 @@ void ButtonHandler::changeStateRight() {
     }
 }
 
-void ButtonHandler::changeSubState() {
-    screenHandler.changeSubScreen();
-    currentSubState = static_cast<SubScreenState>(screenHandler.getCurrentSubScreenNumber());
-}
-
 void ButtonHandler::changeTimeState() {
     currentTimeState = alarmScreen.changeTimeState();
 }
