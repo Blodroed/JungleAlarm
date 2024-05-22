@@ -13,7 +13,9 @@
 UnbufferedSerial pc1(USBTX, USBRX);
 
 // Constructor
-AlarmScreen::AlarmScreen(PwmOut &buzzer) : alarmBuzzer(buzzer), stateOfSettingAlarm(SettingAlarmState::SET_ALARM_HOUR1){
+AlarmScreen::AlarmScreen(PwmOut &buzzer)
+            : alarmBuzzer(buzzer),
+              stateOfSettingAlarm(SettingAlarmState::SET_ALARM_HOUR1){
     alarmEnabled = true;
     alarmSnoozed = 0;
     alarmMuted = false;
@@ -27,6 +29,8 @@ AlarmScreen::AlarmScreen(PwmOut &buzzer) : alarmBuzzer(buzzer), stateOfSettingAl
     setMin2 = 2;
 
     // TODO: remove change to right statements before sending
+
+    playSoundThread.start(callback(this, &AlarmScreen::playAlarmSound));
 };
 
 void AlarmScreen::setAlarmTimeMore() {
@@ -165,9 +169,6 @@ void AlarmScreen::checkAlarmTime() {
             muteAlarm();
         }
 
-        char buffer[256];
-        sprintf(buffer, "isWithinAlarmWindow: %d\n", isWithinAlarmWindow);
-        pc1.write(buffer, strlen(buffer));
         // Activate or deactivate the alarm based on the current time
         if (isWithinAlarmWindow && !alarmMuted) {
             if (!alarmActive && !alarmMuted) {
@@ -178,8 +179,11 @@ void AlarmScreen::checkAlarmTime() {
             alarmActive = false;
             alarmMuted = false;
         }
-
-        ThisThread::sleep_for(1000ms);
+        if (alarmActive) {
+            ThisThread::sleep_for(500ms);
+        } else {
+            ThisThread::sleep_for(1000ms);
+        }
     }
 }
 
@@ -213,6 +217,7 @@ void AlarmScreen::muteAlarm() {
     alarmMuted = true;
     alarmActive = false;
 
+    // reset alarmtime to stored alarm time
     convertAlarmTimeToStruct();
 
     // turn off the buzzer
@@ -255,12 +260,8 @@ void AlarmScreen::snoozeAlarm() {
 
 void AlarmScreen::alarmTrigger() {
     // Trigger the alarm
-    // here we should start the alarm thread and play the alarm sound
-    char buffer[50] = "alarm triggered"; 
-    pc1.write(&buffer, sizeof(buffer));
     // set the alarm to active
     alarmActive = true;
-    
 }
 
 void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
@@ -332,7 +333,7 @@ void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     sprintf(buffer, "setMin2: %d\n", setMin2);
     pc1.write(buffer, strlen(buffer));
 
-    ThisThread::sleep_for(500ms);
+    ThisThread::sleep_for(300ms);
 }
 
 SettingAlarmState AlarmScreen::changeTimeState() {
@@ -342,6 +343,22 @@ SettingAlarmState AlarmScreen::changeTimeState() {
     }
     stateOfSettingAlarm = static_cast<SettingAlarmState>(nextTimeState);
     return stateOfSettingAlarm;
+}
+
+// thread function for playing the alarm
+void AlarmScreen::playAlarmSound() {
+    while (true) {
+        if (alarmActive && !alarmMuted) {
+            alarmBuzzer.period(1.0/440.0);
+            alarmBuzzer.write(0.5);
+            ThisThread::sleep_for(500ms);
+            alarmBuzzer.write(0.0);
+            ThisThread::sleep_for(500ms);
+        } else {
+            alarmBuzzer.write(0.0);
+            ThisThread::sleep_for(1000ms);
+        }
+    }
 }
 
 // mutex locking
@@ -360,4 +377,8 @@ bool AlarmScreen::getAlarmActive() {
 
 bool AlarmScreen::getAlarmMuted() {
     return alarmMuted;
+}
+
+int AlarmScreen::getAlarmSnoozed() {
+    return alarmSnoozed;
 }

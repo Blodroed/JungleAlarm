@@ -49,6 +49,10 @@ public:
     //Getters for alarm states
     bool getAlarmActive();
     bool getAlarmMuted();
+    int getAlarmSnoozed();
+
+    // alarmsound
+    void playAlarmSound();
 
     //The thread managing the alarm and shit
     Thread buzzerRinging;
@@ -76,8 +80,12 @@ private:
     //alarm time as struct
     struct tm alarmTime;
 
-    // mutex for mutexexceptions
+    // play sound thread
+    Thread playSoundThread;
+
+    // mutex for mutex exceptions
     Mutex alarmMutex;
+
 };
 
 

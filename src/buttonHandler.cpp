@@ -24,13 +24,15 @@ void ButtonHandler::handleMiddleButton() {
         // DO NOT, I REPEAT, DO NOT RUN FUNCTIONS INSIDE THIS SWITCH CASE
         switch (currentState) {
             case ScreenState::ALARM_SCREEN_VIEW:
+                eventQueue.call(callback(&alarmScreen, &AlarmScreen::lockMutex));
                 if(alarmScreen.getAlarmActive()) {
                     alarmScreen.snoozeAlarm();
                     break;
                 }
-                if(alarmScreen.getAlarmMuted()) {
+                if(!alarmScreen.getAlarmActive()) {
                     currentSubState = SubScreenState::SET_ALARM_SCREEN;
                 }
+                eventQueue.call(callback(&alarmScreen, &AlarmScreen::unlockMutex));
                 break;
             case ScreenState::WEATHER_SCREEN:
                 break;
@@ -82,9 +84,11 @@ void ButtonHandler::handleSpecialButton() {
     if (currentSubState == SubScreenState::NO_STATE) {
         switch (currentState) {
             case ScreenState::ALARM_SCREEN_VIEW:
-                if(alarmScreen.getAlarmActive()) {
+                eventQueue.call(callback(&alarmScreen, &AlarmScreen::lockMutex));
+                if(alarmScreen.getAlarmActive() || alarmScreen.getAlarmSnoozed() > 0) {
                     alarmScreen.muteAlarm();
                 }
+                eventQueue.call(callback(&alarmScreen, &AlarmScreen::unlockMutex));
                 break;
             case ScreenState::WEATHER_SCREEN:
                 break;
@@ -142,6 +146,8 @@ void ButtonHandler::changeTimeState() {
 }
 
 void ButtonHandler::changeToAlarmScreen() {
-    currentState = ScreenState::ALARM_SCREEN_VIEW;
-    currentSubState = SubScreenState::NO_STATE;
+    if (currentState != ScreenState::ALARM_SCREEN_VIEW && currentSubState == SubScreenState::NO_STATE) {
+        currentState = ScreenState::ALARM_SCREEN_VIEW;
+        currentSubState = SubScreenState::NO_STATE;
+    }
 }

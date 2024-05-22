@@ -7,6 +7,7 @@
 #include "libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
 #include "include/alarmScreen.h"
 
+
 #include <algorithm>
 #include <ctime>
 #include <exception>
@@ -54,14 +55,15 @@ int main()
     // initilization
     lcd.init();
     lcd.setRGB(150, 50, 255);  // Set the LCD background color to blue
-    set_time(1046674880);   // set RTC to the birth of Albert
+    set_time(1046674910);   // set RTC to the birth of Albert
     time_t unixtime = time(NULL);
     alarmBuzzer.write(0.0f);
-    // Define the alarm screen object
-    AlarmScreen alarmScreen(alarmBuzzer);
+
+    // screenhandler
     ScreenHandler screenHandler(0,3,0,2);
 
     //Button handler object
+    AlarmScreen alarmScreen(alarmBuzzer);
     ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, screenHandler, lcd);
 
     // initilize the alarmThread
@@ -73,18 +75,9 @@ int main()
             // screen
             if(buttonHandler.getCurrentSubState() == SubScreenState::NO_STATE) {
                 alarmScreen.displayAlarmScreen(lcd);
-                
-                if(alarmScreen.getAlarmActive()) {
-                    alarmBuzzer.period(1.0/1000.0);
-                    alarmBuzzer.write(0.5f);
-                } else {
-                    alarmBuzzer.write(0.0f);
-                }
-
             } else if(buttonHandler.getCurrentSubState() == SubScreenState::SET_ALARM_SCREEN) {
                 alarmScreen.displaySetAlarmScreen(lcd);
             }
-            
             break;
         }
         

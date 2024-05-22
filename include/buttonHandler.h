@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <ctime>
 
+class AlarmScreen;
 
 enum class ScreenState {
     ALARM_SCREEN_VIEW,
