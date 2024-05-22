@@ -4,14 +4,16 @@
  */
 
 #include "mbed.h"
-#include "libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
+#include "DFRobot_RGBLCD1602.h"
 #include "include/alarmScreen.h"
+
 
 #include <algorithm>
 #include <ctime>
 #include <exception>
 
 #include "buttonHandler.h"
+
 
 // alarm buzzer
 PwmOut alarmBuzzer(D5);
@@ -28,6 +30,9 @@ InterruptIn leftButton(D0, PullUp);
 InterruptIn middleButton(D1, PullUp);
 InterruptIn rightButton(D2, PullUp);
 InterruptIn specialButton(D4, PullUp);
+
+// threads
+Thread alarmThread;
 
 // Change the screen right or left functions
 // This should maybe be added to another class
@@ -46,22 +51,22 @@ void changeScreenRight(int screenNumber, int maxScreenNumber) {
     screenNumber++;
 }
 
-
-
 int main()
 {
     // initilization
     lcd.init();
-    lcd.setRGB(0, 0, 255);  // Set the LCD background color to blue
-    set_time(1046674880);   // set RTC to the birth of Albert
+    lcd.setRGB(150, 50, 255);  // Set the LCD background color to blue
+    set_time(1046674910);   // set RTC to the birth of Albert
     time_t unixtime = time(NULL);
-
-    // Define the alarm screen object
-    AlarmScreen alarmScreen;
-    ScreenHandler screenHandler(0,3,0,2);
+    alarmBuzzer.write(0.0f);
 
     //Button handler object
-    ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, screenHandler, lcd);
+    AlarmScreen alarmScreen(alarmBuzzer);
+    Temphum tempHumScreen;
+    ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, lcd, tempHumScreen);
+
+    // initilize the alarmThread
+    alarmThread.start(callback(&alarmScreen, &AlarmScreen::checkAlarmTime));
 
     while (true) {
         switch (buttonHandler.getCurrentState()) {
@@ -72,29 +77,24 @@ int main()
             } else if(buttonHandler.getCurrentSubState() == SubScreenState::SET_ALARM_SCREEN) {
                 alarmScreen.displaySetAlarmScreen(lcd);
             }
-            
             break;
         }
         
         case ScreenState::TEMP_HUMIDITY_SCREEN: {
             // Bind buttons to news screen
-
             // Test screen hardcoded
-            lcd.display();
-            lcd.printf("Temphum");
-            ThisThread::sleep_for(100ms);
-            lcd.clear();
+            tempHumScreen.displayTempHumScreen(lcd);
             break;
         }
         case ScreenState::WEATHER_SCREEN: {
-            // test screen hardcoded
+           // test screen hardcoded
             lcd.display();
             lcd.printf("Weather");
             ThisThread::sleep_for(100ms);
             lcd.clear();
             break;
         }
-        case ScreenState::NEWS_SCREEN: {
+        case ScreenState::NEWS_SCREEN: { 
             // test screen hardcoded
             lcd.display();
             lcd.printf("News");
@@ -102,7 +102,7 @@ int main()
             lcd.clear();
             break;
         }
-        default:
+        default: 
             lcd.display();
             lcd.printf("Default is being run");
             ThisThread::sleep_for(100ms);

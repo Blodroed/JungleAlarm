@@ -1,12 +1,13 @@
 #include "mbed.h"
 #include "libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
 #include "include/alarmScreen.h"
-#include "screenHandler.h"
-#include "../libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
+#include "mbed_events.h"
+#include "tempHum.h"
 
 #include <algorithm>
 #include <ctime>
 
+class AlarmScreen;
 
 enum class ScreenState {
     ALARM_SCREEN_VIEW,
@@ -24,8 +25,8 @@ enum class SubScreenState {
 class ButtonHandler {
 public:
 
-    ButtonHandler(InterruptIn& leftButton_, InterruptIn& middleButton_, InterruptIn& rightButton_, InterruptIn& specialButton_, AlarmScreen &alarmScreen_, ScreenHandler screenHandler_, DFRobot_RGBLCD1602 &lcd_)
-            : leftButton(leftButton_), middleButton(middleButton_), rightButton(rightButton_), specialButton(specialButton_), alarmScreen(alarmScreen_), screenHandler(screenHandler_), currentState(ScreenState::ALARM_SCREEN_VIEW), currentSubState(SubScreenState::NO_STATE), lcd(lcd_) {
+    ButtonHandler(InterruptIn& leftButton_, InterruptIn& middleButton_, InterruptIn& rightButton_, InterruptIn& specialButton_, AlarmScreen &alarmScreen_, DFRobot_RGBLCD1602 &lcd_, Temphum &temphumScreen_)
+            : leftButton(leftButton_), middleButton(middleButton_), rightButton(rightButton_), specialButton(specialButton_), alarmScreen(alarmScreen_), tempHumidityScreen(temphumScreen_), currentState(ScreenState::ALARM_SCREEN_VIEW), currentSubState(SubScreenState::NO_STATE), lcd(lcd_) {
 
         leftButton.rise(callback(this,&ButtonHandler::handleLeftButton));
         middleButton.rise(callback(this,&ButtonHandler::handleMiddleButton));
@@ -43,8 +44,12 @@ public:
     void changeStateLeft();
     void changeStateRight();
     void changeSubState();
+    void changeToAlarmScreen();
 
     void changeTimeState();
+
+    // eventqueue for interrupts
+    EventQueue eventQueue;
 
     // getters
     ScreenState getCurrentState() { return currentState; }
@@ -53,15 +58,13 @@ public:
 private:
     ScreenState currentState;
     SubScreenState currentSubState;
-    SettingAlarmState currentTimeState;
-    //which digit in the time setting screen the user is changing (hour1, hour2, min1, min2)
+    SettingAlarmState currentTimeState; // the time digit in the time setting screen the user is changing (hour1, hour2, min1, min2)
     //SettingAlarmState currentSettingAlarmState;
 
     AlarmScreen &alarmScreen;
     //WeatherScreen &weatherScreen;
-    //TempHumidityScreen &tempHumidityScreen;
+    Temphum &tempHumidityScreen;
     //NewsScreen &newsScreen;
-    ScreenHandler screenHandler;
 
     InterruptIn &leftButton;
     InterruptIn &middleButton;

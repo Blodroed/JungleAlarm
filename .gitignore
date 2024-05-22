@@ -6,3 +6,7 @@ projectfiles
 /mbed-os/
 /.idea
 /cmake-build-debug
+BUILD
+HTS221
+mbed-os
+libs/HTS221
