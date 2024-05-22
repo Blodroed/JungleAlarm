@@ -11,7 +11,8 @@
 #include <ctime>
 #include <exception>
 
-#include "buttonHandler.h"
+#include "include/buttonHandler.h"
+#include "include/networkhandler.h"
 
 // alarm buzzer
 PwmOut alarmBuzzer(D5);
@@ -59,6 +60,9 @@ int main()
     // Define the alarm screen object
     AlarmScreen alarmScreen;
     ScreenHandler screenHandler(0,3,0,2);
+
+    // Initialization of the network handler
+    NetworkHandler networkHandler;
 
     //Button handler object
     ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, screenHandler, lcd);

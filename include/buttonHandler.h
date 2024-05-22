@@ -1,3 +1,6 @@
+#ifndef JUNGLEALARM_BUTTON_HANDLER_H
+#define JUNGLEALARM_BUTTON_HANDLER_H
+
 #include "mbed.h"
 #include "libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
 #include "include/alarmScreen.h"
@@ -72,3 +75,5 @@ private:
 
     DFRobot_RGBLCD1602 &lcd;
 };
+
+#endif // JUNGLEALARM_BUTTON_HANDLER_H
