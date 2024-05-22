@@ -271,9 +271,23 @@ void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     // get the local time
     struct tm* now = localtime(&seconds);
 
-    // format the time correctly
+    // Create separate buffers for hours and minutes
+    char hourBuffer[3];
+    char minBuffer[3];
+
+    // Format the hours and minutes with zero padding
+    sprintf(hourBuffer, "%02d", now->tm_hour);
+    sprintf(minBuffer, "%02d", now->tm_min);
+
+    // Create the final buffer for the LCD
     char bufferLCD[42] = {0};
-    strftime(bufferLCD, 42, "%a %d %b %R", localtime(&seconds));
+
+    // Format the date with strftime
+    char dateBuffer[20];
+    strftime(dateBuffer, sizeof(dateBuffer), "%a %d %b", now);
+
+    // Combine the date and time into the final string
+    sprintf(bufferLCD, "%s  %s:%s", dateBuffer, hourBuffer, minBuffer);
 
     // Display the time on the LCD
     lcd.display();
