@@ -20,7 +20,7 @@ enum class SettingAlarmState {
 class AlarmScreen {
 public:
     // Constructor
-    AlarmScreen();
+    AlarmScreen(PwmOut &buzzer);
 
     // check alarmtime to rtctime
     void checkAlarmTime();
@@ -42,10 +42,20 @@ public:
     void setAlarmTimeLess();
     void convertAlarmTimeToStruct();
 
-    void threadStart();
+    // mutex locking
+    void lockMutex();
+    void unlockMutex();
+
+    //Getters for alarm states
+    bool getAlarmActive();
+    bool getAlarmMuted();
+    int getAlarmSnoozed();
+
+    // alarmsound
+    void playAlarmSound();
 
     //The thread managing the alarm and shit
-    Thread alarmThread;
+    Thread buzzerRinging;
 
     // variables for setAlarmscreen states
     SettingAlarmState changeTimeState();
@@ -58,14 +68,24 @@ public:
     int setMin2 = 0;
 
 private:
-    bool alarmEnabled;       // enabled or Disabled alarm
-    int alarmSnoozed;   // incremented snooze timer
-    bool alarmMuted;    // muted or not
-    bool alarmActive;   // if the alarm is ringing
-    bool isAlarmSet;    // if the alarm time is set
+    bool alarmSnoozedInstance;
+    bool alarmEnabled;      // enabled or Disabled alarm
+    int alarmSnoozed;       // incremented snooze timer
+    bool alarmMuted;        // muted or not
+    bool alarmActive;       // if the alarm is ringing
+    bool isAlarmSet;        // if the alarm time is set
+
+    PwmOut &alarmBuzzer;
 
     //alarm time as struct
     struct tm alarmTime;
+
+    // play sound thread
+    Thread playSoundThread;
+
+    // mutex for mutex exceptions
+    Mutex alarmMutex;
+
 };
 
 
