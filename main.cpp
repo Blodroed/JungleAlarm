@@ -49,8 +49,6 @@ void changeScreenRight(int screenNumber, int maxScreenNumber) {
     screenNumber++;
 }
 
-
-
 int main()
 {
     // initilization
@@ -58,7 +56,7 @@ int main()
     lcd.setRGB(150, 50, 255);  // Set the LCD background color to blue
     set_time(1046674880);   // set RTC to the birth of Albert
     time_t unixtime = time(NULL);
-
+    alarmBuzzer.write(0.0f);
     // Define the alarm screen object
     AlarmScreen alarmScreen(alarmBuzzer);
     ScreenHandler screenHandler(0,3,0,2);
@@ -75,6 +73,14 @@ int main()
             // screen
             if(buttonHandler.getCurrentSubState() == SubScreenState::NO_STATE) {
                 alarmScreen.displayAlarmScreen(lcd);
+                
+                if(alarmScreen.getAlarmActive()) {
+                    alarmBuzzer.period(1.0/1000.0);
+                    alarmBuzzer.write(0.5f);
+                } else {
+                    alarmBuzzer.write(0.0f);
+                }
+
             } else if(buttonHandler.getCurrentSubState() == SubScreenState::SET_ALARM_SCREEN) {
                 alarmScreen.displaySetAlarmScreen(lcd);
             }

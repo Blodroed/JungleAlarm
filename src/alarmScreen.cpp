@@ -111,7 +111,7 @@ void AlarmScreen::checkAlarmTime() {
         }
         
         // initialized snooze time to 5 minutes
-        int snoozeMinutes = 0;
+        int snoozeMinutes = 1;
 
         // get the current time and converting it to a struct
         time_t seconds = time(NULL);
@@ -119,7 +119,7 @@ void AlarmScreen::checkAlarmTime() {
 
         // Calculate mute time as 10 minutes after the alarm time
         struct tm muteTime = alarmTime;
-        muteTime.tm_min += 2;
+        muteTime.tm_min += 3;
         if (muteTime.tm_min >= 60) {
             muteTime.tm_min -= 60;
             muteTime.tm_hour += 1;
@@ -130,8 +130,10 @@ void AlarmScreen::checkAlarmTime() {
         }
 
         // Adjust mute time if the alarm is snoozed
-        if (alarmSnoozed >= 1) {
-            muteTime.tm_min += 5;
+        if (alarmSnoozed >= 1 && alarmSnoozedInstance) {
+            muteTime.tm_min += snoozeMinutes;
+            alarmTime.tm_min += snoozeMinutes;
+            alarmSnoozedInstance = false;
             if (muteTime.tm_min >= 60) {
                 muteTime.tm_min -= 60;
                 muteTime.tm_hour += 1;
@@ -140,34 +142,47 @@ void AlarmScreen::checkAlarmTime() {
                     muteTime.tm_yday += 1;
                 }
             }
+            if (alarmTime.tm_min >= 60) {
+                alarmTime.tm_min -= 60;
+                alarmTime.tm_hour += 1;
+                if (alarmTime.tm_hour >= 24) {
+                    alarmTime.tm_hour -= 24;
+                    alarmTime.tm_yday += 1;
+                }
+            }
         }
 
         // Check if the current time is within the alarm window
         bool isWithinAlarmWindow = false;
-        if (now->tm_hour == muteTime.tm_hour && now->tm_min <= muteTime.tm_min) {
-            if (now->tm_hour == alarmTime.tm_hour && now->tm_min >= alarmTime.tm_min) {
+        if (now->tm_hour <= muteTime.tm_hour && now->tm_min <= muteTime.tm_min) {
+            if (now->tm_hour >= alarmTime.tm_hour && now->tm_min >= alarmTime.tm_min) {
                 isWithinAlarmWindow = true;
             } else {
                 alarmMuted = true;
             }
         } else {
             alarmMuted = true;
+            muteAlarm();
         }
 
+        char buffer[256];
+        sprintf(buffer, "isWithinAlarmWindow: %d\n", isWithinAlarmWindow);
+        pc1.write(buffer, strlen(buffer));
         // Activate or deactivate the alarm based on the current time
-        if (isWithinAlarmWindow) {
-            if (!alarmActive) {
+        if (isWithinAlarmWindow && !alarmMuted) {
+            if (!alarmActive && !alarmMuted) {
                 alarmTrigger();
-                alarmMuted = false;
             }
             alarmActive = true;
-        } else if (alarmMuted) {
+        } else if (alarmMuted && !isWithinAlarmWindow) {
             alarmActive = false;
             alarmMuted = false;
         }
+
         ThisThread::sleep_for(1000ms);
     }
 }
+
 
 void AlarmScreen::displaySetAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     // the screen where the user can set the alarm using
@@ -196,9 +211,12 @@ void AlarmScreen::muteAlarm() {
     // here we should update the bool alarmActive to false and stop the alarm thread
     alarmSnoozed = 0;
     alarmMuted = true;
+    alarmActive = false;
+
+    convertAlarmTimeToStruct();
 
     // turn off the buzzer
-    alarmBuzzer = 0.0;
+    alarmBuzzer.write(0.0);
 }
 
 void AlarmScreen::disableAlarm() {
@@ -229,6 +247,7 @@ void AlarmScreen::snoozeAlarm() {
     // Snooze the alarm
     // here we should update the bool alarmSnoozed to true and add 5 minutes to the alarm time
     if (alarmActive) {
+        alarmSnoozedInstance = true;
         alarmSnoozed++;
         alarmActive = false; // this should also stop the buzzer alarm
     }
@@ -241,12 +260,6 @@ void AlarmScreen::alarmTrigger() {
     pc1.write(&buffer, sizeof(buffer));
     // set the alarm to active
     alarmActive = true;
-
-    // sound the buzzer
-    alarmBuzzer.period(1.0/440.0);
-    alarmBuzzer = 0.5;
-
-    // change the screen to the alarm screen
     
 }
 
@@ -271,11 +284,11 @@ void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     lcd.setCursor(0, 1);
     if (!isAlarmSet) {
         lcd.printf("ALARM NOT SET");
-    } else if (isAlarmSet && alarmSnoozed >= 1) {
+    } else if (isAlarmSet && alarmSnoozed >= 1 && !alarmActive) {
         lcd.printf("Alarm (s)  %d%d:%d%d", setHour1, setHour2, setMin1, setMin2);
     } else if (isAlarmSet && alarmEnabled && !alarmActive) {
         lcd.printf("Alarm      %d%d:%d%d", setHour1, setHour2, setMin1, setMin2);
-    } else if (isAlarmSet && alarmActive) {
+    } else if (isAlarmSet && alarmActive && !alarmMuted) {
         lcd.printf("ALARM (A)  %d%d:%d%d", setHour1, setHour2, setMin1, setMin2);
     } else if (!alarmEnabled) {
         lcd.printf("----------------");
@@ -318,7 +331,7 @@ void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
 
     sprintf(buffer, "setMin2: %d\n", setMin2);
     pc1.write(buffer, strlen(buffer));
-    
+
     ThisThread::sleep_for(500ms);
 }
 
@@ -341,3 +354,10 @@ void AlarmScreen::unlockMutex() {
     alarmMutex.unlock();
 }
 
+bool AlarmScreen::getAlarmActive() {
+    return alarmActive;
+}
+
+bool AlarmScreen::getAlarmMuted() {
+    return alarmMuted;
+}

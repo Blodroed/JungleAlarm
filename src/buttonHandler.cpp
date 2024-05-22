@@ -24,7 +24,13 @@ void ButtonHandler::handleMiddleButton() {
         // DO NOT, I REPEAT, DO NOT RUN FUNCTIONS INSIDE THIS SWITCH CASE
         switch (currentState) {
             case ScreenState::ALARM_SCREEN_VIEW:
-                currentSubState = SubScreenState::SET_ALARM_SCREEN;
+                if(alarmScreen.getAlarmActive()) {
+                    alarmScreen.snoozeAlarm();
+                    break;
+                }
+                if(alarmScreen.getAlarmMuted()) {
+                    currentSubState = SubScreenState::SET_ALARM_SCREEN;
+                }
                 break;
             case ScreenState::WEATHER_SCREEN:
                 break;
@@ -76,6 +82,9 @@ void ButtonHandler::handleSpecialButton() {
     if (currentSubState == SubScreenState::NO_STATE) {
         switch (currentState) {
             case ScreenState::ALARM_SCREEN_VIEW:
+                if(alarmScreen.getAlarmActive()) {
+                    alarmScreen.muteAlarm();
+                }
                 break;
             case ScreenState::WEATHER_SCREEN:
                 break;

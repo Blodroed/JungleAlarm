@@ -46,6 +46,10 @@ public:
     void lockMutex();
     void unlockMutex();
 
+    //Getters for alarm states
+    bool getAlarmActive();
+    bool getAlarmMuted();
+
     //The thread managing the alarm and shit
     Thread buzzerRinging;
 
@@ -60,6 +64,7 @@ public:
     int setMin2 = 0;
 
 private:
+    bool alarmSnoozedInstance;
     bool alarmEnabled;      // enabled or Disabled alarm
     int alarmSnoozed;       // incremented snooze timer
     bool alarmMuted;        // muted or not
