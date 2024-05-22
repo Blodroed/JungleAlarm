@@ -2,7 +2,7 @@
 #include "libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
 #include "include/alarmScreen.h"
 #include "mbed_events.h"
-#include "temphum.h"
+#include "tempHum.h"
 
 #include <algorithm>
 #include <ctime>

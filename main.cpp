@@ -62,7 +62,7 @@ int main()
 
     //Button handler object
     AlarmScreen alarmScreen(alarmBuzzer);
-    TempHum tempHumScreen;
+    Temphum tempHumScreen;
     ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, lcd, tempHumScreen);
 
     // initilize the alarmThread

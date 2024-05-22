@@ -287,7 +287,7 @@ void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     strftime(dateBuffer, sizeof(dateBuffer), "%a %d %b", now);
 
     // Combine the date and time into the final string
-    sprintf(bufferLCD, "%s  %s:%s", dateBuffer, hourBuffer, minBuffer);
+    sprintf(bufferLCD, "%s %s:%s", dateBuffer, hourBuffer, minBuffer);
 
     // Display the time on the LCD
     lcd.display();
