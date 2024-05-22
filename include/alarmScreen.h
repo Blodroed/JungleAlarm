@@ -5,7 +5,7 @@
 #ifndef EXAM_PROJECT_ALARMSCREEN_H
 #define EXAM_PROJECT_ALARMSCREEN_H
 
-#include "../libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
+#include "DFRobot_RGBLCD1602.h"
 
 #include <ctime>
 

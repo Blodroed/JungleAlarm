@@ -16,7 +16,6 @@ void ButtonHandler::handleLeftButton() {
         default:
             break;
     }
-
 }
 
 void ButtonHandler::handleMiddleButton() {
@@ -77,7 +76,7 @@ void ButtonHandler::handleRightButton() {
         default:
             break;
     }
-
+    
 }
 
 void ButtonHandler::handleSpecialButton() {

@@ -4,7 +4,7 @@
  */
 
 #include "mbed.h"
-#include "libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
+#include "DFRobot_RGBLCD1602.h"
 #include "include/alarmScreen.h"
 
 
@@ -13,6 +13,7 @@
 #include <exception>
 
 #include "buttonHandler.h"
+
 
 // alarm buzzer
 PwmOut alarmBuzzer(D5);
@@ -61,7 +62,8 @@ int main()
 
     //Button handler object
     AlarmScreen alarmScreen(alarmBuzzer);
-    ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, lcd);
+    TempHum tempHumScreen;
+    ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, lcd, tempHumScreen);
 
     // initilize the alarmThread
     alarmThread.start(callback(&alarmScreen, &AlarmScreen::checkAlarmTime));
@@ -80,23 +82,19 @@ int main()
         
         case ScreenState::TEMP_HUMIDITY_SCREEN: {
             // Bind buttons to news screen
-
             // Test screen hardcoded
-            lcd.display();
-            lcd.printf("Temphum");
-            ThisThread::sleep_for(100ms);
-            lcd.clear();
+            tempHumScreen.displayTempHumScreen(lcd);
             break;
         }
         case ScreenState::WEATHER_SCREEN: {
-            // test screen hardcoded
+           // test screen hardcoded
             lcd.display();
             lcd.printf("Weather");
             ThisThread::sleep_for(100ms);
             lcd.clear();
             break;
         }
-        case ScreenState::NEWS_SCREEN: {
+        case ScreenState::NEWS_SCREEN: { 
             // test screen hardcoded
             lcd.display();
             lcd.printf("News");
@@ -104,7 +102,7 @@ int main()
             lcd.clear();
             break;
         }
-        default:
+        default: 
             lcd.display();
             lcd.printf("Default is being run");
             ThisThread::sleep_for(100ms);
