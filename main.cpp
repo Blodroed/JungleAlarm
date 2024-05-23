@@ -13,6 +13,7 @@
 #include <exception>
 
 #include "buttonHandler.h"
+#include "networkHandler.h"
 
 
 // alarm buzzer
@@ -33,6 +34,9 @@ InterruptIn specialButton(D4, PullUp);
 
 // threads
 Thread alarmThread;
+
+// Initialization of network connection
+NetworkHandler NetworkHandler;
 
 // Change the screen right or left functions
 // This should maybe be added to another class
@@ -65,7 +69,7 @@ int main()
     Temphum tempHumScreen;
     ButtonHandler buttonHandler(leftButton, middleButton, rightButton, specialButton, alarmScreen, lcd, tempHumScreen);
 
-    // initilize the alarmThread
+    // initialize the alarmThread
     alarmThread.start(callback(&alarmScreen, &AlarmScreen::checkAlarmTime));
 
     while (true) {
@@ -96,10 +100,7 @@ int main()
         }
         case ScreenState::NEWS_SCREEN: { 
             // test screen hardcoded
-            lcd.display();
-            lcd.printf("News");
-            ThisThread::sleep_for(100ms);
-            lcd.clear();
+            newsScreen.displayNewsScreen(lcd);
             break;
         }
         default: 

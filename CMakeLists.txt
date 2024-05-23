@@ -13,7 +13,9 @@ project(${APP_TARGET})
 
 add_subdirectory(${MBED_PATH})
 
-add_executable(${APP_TARGET})
+add_executable(${APP_TARGET}
+        include/newsScreen.h
+        src/newsScreen.cpp)
 
 target_sources(${APP_TARGET}
     PRIVATE

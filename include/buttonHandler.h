@@ -3,6 +3,7 @@
 #include "include/alarmScreen.h"
 #include "mbed_events.h"
 #include "tempHum.h"
+#include "newsScreen.h"
 
 #include <algorithm>
 #include <ctime>
@@ -26,7 +27,7 @@ class ButtonHandler {
 public:
 
     ButtonHandler(InterruptIn& leftButton_, InterruptIn& middleButton_, InterruptIn& rightButton_, InterruptIn& specialButton_, AlarmScreen &alarmScreen_, DFRobot_RGBLCD1602 &lcd_, Temphum &temphumScreen_)
-            : leftButton(leftButton_), middleButton(middleButton_), rightButton(rightButton_), specialButton(specialButton_), alarmScreen(alarmScreen_), tempHumidityScreen(temphumScreen_), currentState(ScreenState::ALARM_SCREEN_VIEW), currentSubState(SubScreenState::NO_STATE), lcd(lcd_) {
+            : leftButton(leftButton_), middleButton(middleButton_), rightButton(rightButton_), specialButton(specialButton_), alarmScreen(alarmScreen_), tempHumidityScreen(temphumScreen_), newsScreen(newsScreen_), currentState(ScreenState::ALARM_SCREEN_VIEW), currentSubState(SubScreenState::NO_STATE), lcd(lcd_) {
 
         leftButton.rise(callback(this,&ButtonHandler::handleLeftButton));
         middleButton.rise(callback(this,&ButtonHandler::handleMiddleButton));
@@ -64,7 +65,7 @@ private:
     AlarmScreen &alarmScreen;
     //WeatherScreen &weatherScreen;
     Temphum &tempHumidityScreen;
-    //NewsScreen &newsScreen;
+    NewsScreen &newsScreen;
 
     InterruptIn &leftButton;
     InterruptIn &middleButton;
