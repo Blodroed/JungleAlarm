@@ -1,6 +1,7 @@
 /**
  * @file main.cpp
  * @author Albert Salvesen-Orø
+ * @author Aristidis Akritidis
  */
 
 #include "mbed.h"
@@ -26,30 +27,13 @@ DFRobot_RGBLCD1602 lcd(&lcdI2C);
 BufferedSerial pc(USBTX, USBRX);
 
 // Define buttons with interrupts
-InterruptIn leftButton(D0, PullUp); 
-InterruptIn middleButton(D1, PullUp);
-InterruptIn rightButton(D2, PullUp);
-InterruptIn specialButton(D4, PullUp);
+InterruptIn leftButton(A5, PullUp); 
+InterruptIn middleButton(D2, PullUp);
+InterruptIn rightButton(A3, PullUp);
+InterruptIn specialButton(A2, PullUp);
 
 // threads
 Thread alarmThread;
-
-// Change the screen right or left functions
-// This should maybe be added to another class
-void changeScreenLeft(int screenNumber, int maxScreenNumber) {
-    if (screenNumber == 0) {
-        screenNumber = maxScreenNumber;
-        return;
-    }
-    screenNumber--;
-}
-void changeScreenRight(int screenNumber, int maxScreenNumber) {
-    if (screenNumber == maxScreenNumber) {
-        screenNumber = 0;
-        return;
-    }
-    screenNumber++;
-}
 
 int main()
 {
