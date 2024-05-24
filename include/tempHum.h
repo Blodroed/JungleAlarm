@@ -1,3 +1,8 @@
+/**
+ * @file tempHum.h
+ * @author Aristidis Akritidis
+ */
+
 #include "mbed.h"
 #include "HTS221Sensor.h"
 #include "DFRobot_RGBLCD1602.h"

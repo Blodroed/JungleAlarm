@@ -1,3 +1,9 @@
+/**
+ * @file buttonHandler.h
+ * @author Albert Salvesen-Orø
+ * @author Aristidis Akritidis
+ */
+
 #include "mbed.h"
 #include "libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
 #include "include/alarmScreen.h"

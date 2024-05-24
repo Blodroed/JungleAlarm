@@ -1,3 +1,9 @@
+/**
+ * @file buttonHandler
+ * @author Albert Salvesen-Orø
+ * @author Aristidis Akritidis
+ */
+
 #include "buttonHandler.h"
 #include "mbed_events.h"
 

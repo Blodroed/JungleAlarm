@@ -1,6 +1,8 @@
-//
-// Created by Albert on 30.04.2024.
-//
+/**
+ * @file alarmscreen.cpp
+ * @author Albert Salvesen-Orø
+ * @author Aristidis Akritidis
+ */
 
 #include "../include/alarmScreen.h"
 #include "../libs/DFRobot_RGBLCD1602/DFRobot_RGBLCD1602.h"
@@ -21,10 +23,10 @@ AlarmScreen::AlarmScreen(PwmOut &buzzer)
     alarmMuted = false;
     alarmActive = false;
     isAlarmSet = true;
-    alarmTime.tm_hour = 7;
+    alarmTime.tm_hour = 8;
     alarmTime.tm_min = 2;
     setHour1 = 0;
-    setHour2 = 7;
+    setHour2 = 8;
     setMin1 = 0;
     setMin2 = 2;
 
@@ -309,6 +311,7 @@ void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
         lcd.printf("----------------");
     }
 
+    /*
     // char buffer to computer of the values in alarmscreen
     char buffer[256];
     sprintf(buffer, "----------------\n");
@@ -345,7 +348,7 @@ void AlarmScreen::displayAlarmScreen(DFRobot_RGBLCD1602 &lcd) {
     pc1.write(buffer, strlen(buffer));
 
     sprintf(buffer, "setMin2: %d\n", setMin2);
-    pc1.write(buffer, strlen(buffer));
+    pc1.write(buffer, strlen(buffer));*/
 
     ThisThread::sleep_for(300ms);
 }

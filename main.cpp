@@ -2,6 +2,8 @@
  * @file main.cpp
  * @author Albert Salvesen-Orø
  * @author Aristidis Akritidis
+ * @author Marcus Hagen
+ * @author Lars Angel Høydahl Ohme
  */
 
 #include "mbed.h"
@@ -14,7 +16,6 @@
 #include <exception>
 
 #include "buttonHandler.h"
-
 
 // alarm buzzer
 PwmOut alarmBuzzer(D5);

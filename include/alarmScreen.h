@@ -1,6 +1,8 @@
-//
-// Created by Albert on 30.04.2024.
-//
+/**
+ * @file alarmscreen.h
+ * @author Albert Salvesen-Orø
+ * @author Aristidis Akritidis
+ */
 
 #ifndef EXAM_PROJECT_ALARMSCREEN_H
 #define EXAM_PROJECT_ALARMSCREEN_H

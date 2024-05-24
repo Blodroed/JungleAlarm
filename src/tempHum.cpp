@@ -1,3 +1,8 @@
+/**
+ * @file temphum.cpp
+ * @author Aristidis Akritidis
+ */
+
 #include "tempHum.h"
 #include <cstdio>
 
