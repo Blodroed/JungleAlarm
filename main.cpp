@@ -25,7 +25,7 @@ I2C lcdI2C(D14, D15);
 DFRobot_RGBLCD1602 lcd(&lcdI2C);
 
 // buffered serial for debugging
-BufferedSerial pc(USBTX, USBRX);
+UnbufferedSerial pc(USBTX, USBRX);
 
 // Define buttons with interrupts
 InterruptIn leftButton(A5, PullUp); 
@@ -35,15 +35,26 @@ InterruptIn specialButton(A2, PullUp);
 
 // threads
 Thread alarmThread;
+Thread networkconnection;
+
+// ===== network connection =====
+// Declare local function(s)
 
 int main()
 {
     // initilization
+
+    // network init should go here
+
     lcd.init();
     lcd.setRGB(150, 50, 255);  // Set the LCD background color to blue
-    set_time(1046674910);   // set RTC to the birth of Albert
+    set_time(1046674910);   // use this function in the network connection stuff
     time_t unixtime = time(NULL);
     alarmBuzzer.write(0.0f);
+    pc.baud(9600);
+
+    // init network connect thread
+    // networkConnect.start($networkConnectFunction$);
 
     //Button handler object
     AlarmScreen alarmScreen(alarmBuzzer);
